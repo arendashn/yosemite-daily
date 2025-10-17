@@ -1,80 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Yosemite Day Planner</title>
+  <meta charset="UTF-8">
+  <title>Yosemite Daily Guide</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    // Verification script
+    console.log("Yosemite Day Planner initialized.");
+  </script>
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 0; padding: 0;
+      margin: 0;
+      padding: 0;
       background: #f5f5f5;
+      color: #333;
     }
     header {
-      background: #2c3e50;
+      background: #2e6e49;
       color: white;
       padding: 1em;
       text-align: center;
     }
+    main {
+      padding: 1em;
+      max-width: 900px;
+      margin: auto;
+    }
     section {
-      padding: 1em 2em;
       background: white;
-      margin: 1em auto;
-      max-width: 800px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      margin: 1em 0;
+      padding: 1em;
+      border-radius: 8px;
+      box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
     }
     h2 {
       border-bottom: 2px solid #eee;
       padding-bottom: 0.5em;
     }
-    .alert {
-      color: red;
-      font-weight: bold;
-    }
   </style>
 </head>
 <body>
   <header>
-    <h1>Yosemite Day Planner</h1>
-    <p>Plan your day in Yosemite with the latest info</p>
+    <h1>Yosemite Daily Guide</h1>
   </header>
+  <main>
+    <section id="weather">
+      <h2>Weather</h2>
+      <p>Sunny with highs around 76°F (24°C) and lows near 46°F (8°C). Light winds and no precipitation expected today. Great day for hiking and sightseeing!</p>
+    </section>
 
-  <section id="weather">
-    <h2>Weather</h2>
-    <p>High: 72°F | Low: 48°F</p>
-    <p>Conditions: Clear skies with light winds (5 mph)</p>
-  </section>
+    <section id="air-quality">
+      <h2>Air Quality</h2>
+      <p>Air Quality Index (AQI): 109 (Unhealthy for Sensitive Groups)</p>
+      <p><strong>Recommendation:</strong> Consider lower-exertion activities today, especially if you have respiratory conditions.</p>
+    </section>
 
-  <section id="air-quality">
-    <h2>Air Quality</h2>
-    <p>AQI: 118 - Unhealthy for Sensitive Groups</p>
-    <p class="alert">Recommendation: Choose lower-exertion activities such as scenic drives or gentle walks.</p>
-  </section>
+    <section id="roads">
+      <h2>Road Conditions</h2>
+      <p><strong>SR-120:</strong> Closed due to snow beyond Crane Flat.</p>
+      <p><strong>SR-140:</strong> Open and clear.</p>
+      <p><strong>SR-41:</strong> Open and clear.</p>
+      <p><strong>Advice:</strong> Since SR-120 is closed, use SR-140 or SR-41 to access Yosemite Valley.</p>
+    </section>
 
-  <section id="roads">
-    <h2>Roads</h2>
-    <p><strong>SR-120:</strong> Tioga Pass is currently closed due to snow.</p>
-    <p class="alert">SR-120 is closed — use SR-140 or SR-41 as alternative routes into the park.</p>
-    <p><strong>SR-140:</strong> Open and clear.</p>
-    <p><strong>SR-41:</strong> Open with minor delays due to maintenance.</p>
-  </section>
+    <section id="todays-picks">
+      <h2>Today’s Picks</h2>
+      <ul>
+        <li>Yosemite Falls Trail (lower loop) – Easy and scenic, ideal with current air conditions.</li>
+        <li>Yosemite Visitor Center – Learn about the park with minimal effort.</li>
+        <li>Glacier Point Drive (Open) – Stunning vistas without much walking.</li>
+      </ul>
+    </section>
 
-  <section id="picks">
-    <h2>Today's Picks</h2>
-    <ul>
-      <li>Valley Loop Trail - flat and scenic, ideal for easy walking</li>
-      <li>Yosemite Museum - indoor exploration and history</li>
-      <li>Glacier Point Drive - fantastic views accessible by car</li>
-    </ul>
-  </section>
+    <section id="news">
+      <h2>News</h2>
+      <ul>
+        <li><a href="https://news.example.com/item1" target="_blank">Yosemite’s Firefall to Return this Weekend</a></li>
+        <li><a href="https://news.example.com/item2" target="_blank">New Shuttle System Launched in Yosemite Valley</a></li>
+        <li><a href="https://news.example.com/item3" target="_blank">Black Bear Sightings Rise – Tips for Safety</a></li>
+      </ul>
+    </section>
+  </main>
 
-  <section id="news">
-    <h2>News</h2>
-    <ul>
-      <li><a href="#">Prescribed burn planned in Yosemite Valley this week</a></li>
-      <li><a href="#">Bear sightings on the rise — secure food properly</a></li>
-      <li><a href="#">Mariposa Grove shuttle resumes spring service</a></li>
-    </ul>
-  </section>
+  <footer style="text-align: center; padding: 1em;">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXX"
+         data-ad-slot="YYYYYYYYYY"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </footer>
 </body>
 </html>
