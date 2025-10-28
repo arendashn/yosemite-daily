@@ -75,7 +75,7 @@
         console.log('Fetching dynamic data...');
 
         // ---- Weather ----
-        const wUrl=`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&timezone=${encodeURIComponent(tz)}&current=temperature_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,uv_index_max,sunrise,sunset,windspeed_10m_max`;
+        const wUrl='https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon+'&timezone='+encodeURIComponent(tz)+'&current=temperature_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,uv_index_max,sunrise,sunset,windspeed_10m_max';
         const wRes=await fetch(wUrl);
         const w=await wRes.json();
         const cur=w.current||{}, day=w.daily||{};
@@ -91,7 +91,7 @@
         curWind=cur.wind_speed_10m||0;
 
         // ---- AQI ----
-        const aUrl=`https://api.airvisual.com/v2/nearest_city?lat=${lat}&lon=${lon}&key=cfd35e32-3dd6-42b6-ae31-63036ed805dd`;
+        const aUrl='https://api.airvisual.com/v2/nearest_city?lat='+lat+'&lon='+lon+'&key=cfd35e32-3dd6-42b6-ae31-63036ed805dd';
         const aRes=await fetch(aUrl);
         const a=await aRes.json();
         const aqiVal=parseInt(a.data?.current?.pollution?.aqius)||0;
@@ -99,68 +99,51 @@
         document.getElementById('aqi-content').innerHTML=
           '<p><strong>AQI:</strong> '+aqiVal+' ('+catAqi(aqiVal)+').</p>'+(highAqi?'<p class="alert">High AQI—opt for lower-exertion activities.</p>':'');
 
-        // ---- Caltrans (QuickMap API – CORS enabled) ----
+        // ---- Caltrans (via CORS proxy) ----
+        const proxy = 'https://api.allorigins.win/raw?url=';
         async function getCaltrans(road){
           try{
-            const res=await fetch('https://api.caltrans-quickmap.com/highwayincidents?roadNumber='+road);
+            const url = proxy + encodeURIComponent('https://api.caltrans-quickmap.com/highwayincidents?roadNumber='+road);
+            const res = await fetch(url);
             if(!res.ok) throw new Error('API error');
-            const data=await res.json();
+            const data = await res.json();
             return summarizeIncidents(data);
           }catch(e){ return 'Error loading Caltrans data.'; }
         }
-        const road120_cal=await getCaltrans(120);
-        const road140_cal=await getCaltrans(140);
-        const road41_cal =await getCaltrans(41);
+        const road120_cal = await getCaltrans(120);
+        const road140_cal = await getCaltrans(140);
+        const road41_cal  = await getCaltrans(41);
 
-        // ---- NPS (via public CORS proxy) ----
-        const proxy='https://api.allorigins.win/raw?url=';
-        const npsUrl=proxy+encodeURIComponent('https://www.nps.gov/yose/planyourvisit/conditions.htm');
-        const npsRes=await fetch(npsUrl);
+        // ---- NPS (via same proxy) ----
+        const npsUrl = proxy + encodeURIComponent('https://www.nps.gov/yose/planyourvisit/conditions.htm');
+        const npsRes = await fetch(npsUrl);
         if(!npsRes.ok) throw new Error('NPS fetch error');
-        const npsHtml=await npsRes.text();
-        const parser=new DOMParser();
-        const doc=parser.parseFromString(npsHtml,'text/html');
-        const rows=doc.querySelectorAll('table tr');
-        const tiogaStatus   = rows[0] ? rows[0].querySelector('td:first-child').innerText.trim().replace(/\s+/g,' ') : 'Data unavailable';
-        const wawonaStatus  = rows[1] ? rows[1].querySelector('td:first-child').innerText.trim().replace(/\s+/g,' ') : 'Data unavailable';
-        const elportalStatus= rows[2] ? rows[2].querySelector('td:first-child').innerText.trim().replace(/\s+/g,' ') : 'Data unavailable';
+        const npsHtml = await npsRes.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(npsHtml,'text/html');
+        const rows = doc.querySelectorAll('table tr');
+        const tiogaStatus    = rows[0] ? rows[0].querySelector('td:first-child').innerText.trim().replace(/\s+/g,' ') : 'Data unavailable';
+        const wawonaStatus   = rows[1] ? rows[1].querySelector('td:first-child').innerText.trim().replace(/\s+/g,' ') : 'Data unavailable';
+        const elportalStatus = rows[2] ? rows[2].querySelector('td:first-child').innerText.trim().replace(/\s+/g,' ') : 'Data unavailable';
 
         const road120 = road120_cal + '. Park (Tioga Road): ' + tiogaStatus;
         const road140 = road140_cal + '. Park (El Portal Road): ' + elportalStatus;
         const road41  = road41_cal  + '. Park (Wawona Road): '  + wawonaStatus;
         isSr120Closed = tiogaStatus.toLowerCase().includes('closed');
 
-        document.getElementById('roads-list').innerHTML=
-          '<li><strong>SR-120:</strong> '+road120+(isSr120Closed?' <span class="alert">(Closed—use SR-140/SR-41)</span>':'')+'</li>'+
-          '<li><strong>SR-140:</strong> '+road140+'</li>'+
-          '<li><strong>SR-41:</strong> '+road41+'</li>';
+        document.getElementById('roads-list').innerHTML =
+          '<li><strong>SR-120:</strong> ' + road120 + (isSr120Closed ? ' <span class="alert">(Closed—use SR-140/SR-41)</span>' : '') + '</li>' +
+          '<li><strong>SR-140:</strong> ' + road140 + '</li>' +
+          '<li><strong>SR-41:</strong> '  + road41  + '</li>';
 
         // ---- Picks ----
         const picks={
-          sunnyWarm:['Hike to Vernal Fall via Mist Trail (moderate, 3 miles).',
-                     'Explore Glacier Point for panoramic views (drive-up).',
-                     'Picnic at El Capitan Meadow with rock climbing sights.',
-                     'Bike the Valley floor paths (rentals available).'],
-          sunnyCool:['Short hike to Lower Yosemite Fall (easy, 1 mile).',
-                     'Visit the Yosemite Museum and Village.',
-                     'Drive to Tuolumne Grove for giant sequoias (easy walk).',
-                     'Stargazing prep: Head to high country if accessible.'],
-          rainy:['Tour the Ansel Adams Gallery indoors.',
-                 'Watch the free ranger program at Valley Visitor Center.',
-                 'Enjoy Yosemite Valley from your car (scenic loop).',
-                 'Visit the Mountain Room Lounge for cozy views.'],
-          windy:['Sheltered stroll along the Merced River.',
-                 'Explore Curry Village for shops and ice cream.',
-                 'Indoor: Check out Yosemite Art & Central Sierra Historical Society.',
-                 'Avoid exposed ridges—stick to valley floor.'],
-          highAqi:['Easy paved paths like Valley Loop Trail.',
-                   'Drive to viewpoints like Tunnel View.',
-                   'Indoor: Yosemite Valley Chapel visit.',
-                   'Short, low-elevation walks only.'],
-          default:['Visit Yosemite Valley Loop for a gentle stroll.',
-                   'Explore the Ansel Adams Gallery indoors.',
-                   'Take a scenic drive to Tunnel View.',
-                   'Short hike to Bridalveil Fall.']
+          sunnyWarm:['Hike to Vernal Fall via Mist Trail (moderate, 3 miles).','Explore Glacier Point for panoramic views (drive-up).','Picnic at El Capitan Meadow with rock climbing sights.','Bike the Valley floor paths (rentals available).'],
+          sunnyCool:['Short hike to Lower Yosemite Fall (easy, 1 mile).','Visit the Yosemite Museum and Village.','Drive to Tuolumne Grove for giant sequoias (easy walk).','Stargazing prep: Head to high country if accessible.'],
+          rainy:['Tour the Ansel Adams Gallery indoors.','Watch the free ranger program at Valley Visitor Center.','Enjoy Yosemite Valley from your car (scenic loop).','Visit the Mountain Room Lounge for cozy views.'],
+          windy:['Sheltered stroll along the Merced River.','Explore Curry Village for shops and ice cream.','Indoor: Check out Yosemite Art & Central Sierra Historical Society.','Avoid exposed ridges—stick to valley floor.'],
+          highAqi:['Easy paved paths like Valley Loop Trail.','Drive to viewpoints like Tunnel View.','Indoor: Yosemite Valley Chapel visit.','Short, low-elevation walks only.'],
+          default:['Visit Yosemite Valley Loop for a gentle stroll.','Explore the Ansel Adams Gallery indoors.','Take a scenic drive to Tunnel View.','Short hike to Bridalveil Fall.']
         };
         let sel=picks.default;
         if(highAqi) sel=picks.highAqi;
@@ -176,7 +159,7 @@
         console.log('Dynamic load OK');
       }catch(e){
         console.error('Dynamic error:',e);
-        const setErr=(id,msg)=> { const el=document.getElementById(id); if(el) el.innerHTML=msg; };
+        const setErr=(id,msg)=>{ const el=document.getElementById(id); if(el) el.innerHTML=msg; };
         setErr('current-weather','<strong>Current:</strong> Error loading.');
         setErr('daily-weather','<strong>Daily:</strong> Error loading.');
         setErr('aqi-content','Error loading AQI.');
