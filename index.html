@@ -30,15 +30,18 @@
 </section>
   <section>
   <h2>Roads</h2>
-  <ul id="roads-list">
-    <li>Loading...</li>
+  <ul>
+    <li id="road-120"><strong>SR-120:</strong> </h3> <p> <strong></li>
+    <li id="road-140"><strong>SR-140:</strong> </h3> <p> <strong></li>
+    <li id="road-41"><strong>SR-41:</strong> </h3> <p> <strong></li>
   </ul>
 </section>
   <section>
-  <h2>Today’s Picks</h2>
+  <h2>Today's Picks</h2>
   <ul id="picks-list">
     <li>Loading...</li>
   </ul>
+  <button onclick="fetchDynamicData()" style="margin-top: 10px; padding: 5px 10px; background: #2e5236; color: white; border: none; border-radius: 4px; cursor: pointer;">Refresh Data</button>
 </section>
   <section>
   <h2>News</h2>
@@ -47,77 +50,46 @@
   <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8802535839575365" data-ad-slot="1234567890" data-ad-format="auto" data-full-width-responsive="true"></ins>
   <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
   <script>
-    // Client-side fetches for dynamic content on page load
+    // Static roads for picks
+    const staticRoads = {
+      sr120: '</h3> <p> <strong>',
+      isSr120Closed: false
+    };
     async function fetchDynamicData() {
       const lat = 37.8651;
       const lon = -119.5383;
       const tz = 'America/Los_Angeles';
-      
-      // Updated parseRoad for Caltrans plain text structure
-      function parseRoad(text) {
-        if (!text) return 'Data unavailable';
-        console.log('Raw road text:', text.substring(0, 200)); // Debug log
-        // Match status after SR number (e.g., "No traffic restrictions..." or "Closed...")
-        const statusMatch = text.match(/SR \d+.*?(No traffic restrictions are reported for this area\.|Closed to.*?traffic|Open with.*?restrictions|Chain controls).*?(?=\[|\nFor Yosemite|$)/i);
-        if (statusMatch) {
-          return statusMatch[0].trim().replace(/\s+/g, ' ');
-        }
-        // Fallback: Grab first meaningful line after SR
-        const fallbackMatch = text.match(/SR \d+\s*([\s\S]*?)(?=\[|$)/i);
-        return fallbackMatch ? fallbackMatch[1].trim().replace(/\s+/g, ' ') : 'No status found';
-      }
-      
       try {
-        console.log('Starting dynamic fetches...'); // Debug
-        
-        // 1. Fetch Weather
-        const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&timezone=${encodeURIComponent(tz)}&current=temperature_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,uv_index_max,sunrise,sunset,windspeed_10m_max`;
-        console.log('Weather URL:', weatherUrl); // Debug
+        console.log('Fetching dynamic data...');
+        // Weather
+        const weatherUrl = 'https://api.open-meteo.com/v1/forecast?latitude=' + lat + '&longitude=' + lon + '&timezone=' + encodeURIComponent(tz) + '&current=temperature_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,uv_index_max,sunrise,sunset,windspeed_10m_max';
         const weatherRes = await fetch(weatherUrl);
-        if (!weatherRes.ok) throw new Error(`Weather fetch failed: ${weatherRes.status}`);
         const weatherData = await weatherRes.json();
-        if (weatherData.error) throw new Error(`Weather API error: ${weatherData.reason}`);
-        console.log('Weather fetched OK'); // Debug
         const current = weatherData.current || {};
         const daily = weatherData.daily || {};
-        
-        // Weather helpers (unchanged)
-        function cToF(c) {
-          return Math.round((c * 9/5) + 32);
-        }
+        function cToF(c) { return Math.round((c * 9/5) + 32); }
         function getWeatherDesc(code) {
           const codes = {0: 'Clear sky', 1: 'Mainly clear', 2: 'Partly cloudy', 3: 'Overcast',45: 'Fog', 48: 'Depositing rime fog', 51: 'Light drizzle', 53: 'Moderate drizzle', 55: 'Dense drizzle',61: 'Slight rain', 63: 'Moderate rain', 65: 'Heavy rain', 71: 'Slight snow', 73: 'Moderate snow', 75: 'Heavy snow',80: 'Slight rain showers', 81: 'Moderate rain showers', 82: 'Violent rain showers'};
           return codes[code] || 'Unknown';
         }
         function formatTime(ts) {
           if (!ts) return 'N/A';
-          const date = new Date(ts * 1000);
-          return date.toLocaleTimeString();
+          return new Date(ts * 1000).toLocaleTimeString();
         }
-        
-        document.getElementById('current-weather').innerHTML = `<strong>Current:</strong> Temp ${cToF(current.temperature_2m)}°F (Feels ${cToF(current.apparent_temperature)}°F), ${getWeatherDesc(current.weather_code)}, Precip ${current.precipitation || 0}mm, Wind ${current.wind_speed_10m || 0}km/h.`;
-        document.getElementById('daily-weather').innerHTML = `<strong>Daily:</strong> High ${cToF(daily.temperature_2m_max?.[0])}°F, Low ${cToF(daily.temperature_2m_min?.[0])}°F, Precip Prob ${daily.precipitation_probability_max?.[0] || 0}%, UV ${daily.uv_index_max?.[0] || 0}, Sunrise ${formatTime(daily.sunrise?.[0])}, Sunset ${formatTime(daily.sunset?.[0])}.`;
-        
-        // Extract for picks
+        document.getElementById('current-weather').innerHTML = '<strong>Current:</strong> Temp ' + cToF(current.temperature_2m) + '°F (Feels ' + cToF(current.apparent_temperature) + '°F), ' + getWeatherDesc(current.weather_code) + ', Precip ' + (current.precipitation || 0) + 'mm, Wind ' + (current.wind_speed_10m || 0) + 'km/h.';
+        document.getElementById('daily-weather').innerHTML = '<strong>Daily:</strong> High ' + cToF(daily.temperature_2m_max?.[0]) + '°F, Low ' + cToF(daily.temperature_2m_min?.[0]) + '°F, Precip Prob ' + (daily.precipitation_probability_max?.[0] || 0) + '%, UV ' + (daily.uv_index_max?.[0] || 0) + ', Sunrise ' + formatTime(daily.sunrise?.[0]) + ', Sunset ' + formatTime(daily.sunset?.[0]) + '.';
         const currentTempC = parseFloat(current.temperature_2m) || 20;
         const currentDesc = getWeatherDesc(current.weather_code || 0).toLowerCase();
         const highTempC = parseFloat(daily.temperature_2m_max?.[0]) || 20;
         const precipProb = parseFloat(daily.precipitation_probability_max?.[0]) || 0;
         const currentWind = current.wind_speed_10m || 0;
-        
-        // 2. Fetch AQI
-        const aqiUrl = `https://api.airvisual.com/v2/nearest_city?lat=${lat}&lon=${lon}&key=cfd35e32-3dd6-42b6-ae31-63036ed805dd`;
-        console.log('AQI URL:', aqiUrl); // Debug
+        // AQI
+        const aqiUrl = 'https://api.airvisual.com/v2/nearest_city?lat=' + lat + '&lon=' + lon + '&key=cfd35e32-3dd6-42b6-ae31-63036ed805dd';
         const aqiRes = await fetch(aqiUrl);
-        if (!aqiRes.ok) throw new Error(`AQI fetch failed: ${aqiRes.status}`);
         const aqiData = await aqiRes.json();
-        if (aqiData.status !== 'success') throw new Error('AQI API error');
-        console.log('AQI fetched OK'); // Debug
         const pollution = aqiData.data?.current?.pollution || {};
-        const aqiValue = parseInt(pollution.aqius) || 0;
-        const isHighAqi = aqiValue >= 101;
-        
-        // Derive category
+        const dynamicAqiValue = parseInt(pollution.aqius) || 0;
+        const dynamicIsHighAqi = dynamicAqiValue >= 101;
         function getAqiCategory(aqi) {
           if (aqi <= 50) return 'Good';
           if (aqi <= 100) return 'Moderate';
@@ -126,44 +98,9 @@
           if (aqi <= 300) return 'Very Unhealthy';
           return 'Hazardous';
         }
-        const aqiCategory = getAqiCategory(aqiValue);
-        
-        document.getElementById('aqi-content').innerHTML = `<p><strong>AQI:</strong> ${aqiValue} (${aqiCategory}).</p>${isHighAqi ? '<p class="alert">High AQI—opt for lower-exertion activities.</p>' : ''}`;
-        
-        // 3. Fetch Roads (parallel)
-        const roadUrls = {
-          120: 'https://roads.dot.ca.gov/roadscell.php?roadnumber=120',
-          140: 'https://roads.dot.ca.gov/roadscell.php?roadnumber=140',
-          41: 'https://roads.dot.ca.gov/roadscell.php?roadnumber=41'
-        };
-        console.log('Fetching roads...'); // Debug
-        const roadPromises = Object.entries(roadUrls).map(async ([key, url]) => {
-          try {
-            const res = await fetch(url);
-            if (!res.ok) throw new Error(`Road ${key} fetch failed: ${res.status}`);
-            const text = await res.text();
-            return { key, status: parseRoad(text) };
-          } catch (err) {
-            console.error(`Road ${key} error: `, err);
-            return { key, status: 'Error loading status' };
-          }
-        });
-        const roadResults = await Promise.all(roadPromises);
-        console.log('Roads fetched:', roadResults); // Debug
-        const road120 = roadResults.find(r => r.key === '120')?.status || 'Error loading';
-        const road140 = roadResults.find(r => r.key === '140')?.status || 'Error loading';
-        const road41 = roadResults.find(r => r.key === '41')?.status || 'Error loading';
-        const isSr120Closed = road120.toLowerCase().includes('closed');
-        
-        // Update roads HTML
-        const roadsList = document.getElementById('roads-list');
-        roadsList.innerHTML = `
-          <li><strong>SR-120:</strong> ${road120}${isSr120Closed ? ' <span class="alert">(Closed—use SR-140/SR-41)</span>' : ''}</li>
-          <li><strong>SR-140:</strong> ${road140}</li>
-          <li><strong>SR-41:</strong> ${road41}</li>
-        `;
-        
-        // 4. Dynamic Picks (using fetched data)
+        const aqiCategory = getAqiCategory(dynamicAqiValue);
+        document.getElementById('aqi-content').innerHTML = '<p><strong>AQI:</strong> ' + dynamicAqiValue + ' (' + aqiCategory + ').</p>' + (dynamicIsHighAqi ? '<p class="alert">High AQI—opt for lower-exertion activities.</p>' : '');
+        // Picks
         const allPicks = {
           sunnyWarm: ['Hike to Vernal Fall via Mist Trail (moderate, 3 miles).','Explore Glacier Point for panoramic views (drive-up).','Picnic at El Capitan Meadow with rock climbing sights.','Bike the Valley floor paths (rentals available).'],
           sunnyCool: ['Short hike to Lower Yosemite Fall (easy, 1 mile).','Visit the Yosemite Museum and Village.','Drive to Tuolumne Grove for giant sequoias (easy walk).','Stargazing prep: Head to high country if accessible.'],
@@ -172,9 +109,8 @@
           highAqi: ['Easy paved paths like Valley Loop Trail.','Drive to viewpoints like Tunnel View.','Indoor: Yosemite Valley Chapel visit.','Short, low-elevation walks only.'],
           default: ['Visit Yosemite Valley Loop for a gentle stroll.','Explore the Ansel Adams Gallery indoors.','Take a scenic drive to Tunnel View.','Short hike to Bridalveil Fall.']
         };
-        
         let selectedPicks = allPicks.default;
-        if (isHighAqi) {
+        if (dynamicIsHighAqi) {
           selectedPicks = allPicks.highAqi;
         } else if (precipProb > 50 || currentDesc.includes('rain') || currentDesc.includes('drizzle') || currentDesc.includes('shower')) {
           selectedPicks = allPicks.rainy;
@@ -184,8 +120,6 @@
         } else if (currentWind > 20) {
           selectedPicks = allPicks.windy;
         }
-        
-        // Shuffle and take 4
         function shuffle(array) {
           const shuffled = [...array];
           for (let i = shuffled.length - 1; i > 0; i--) {
@@ -195,19 +129,16 @@
           return shuffled;
         }
         let picks = shuffle(selectedPicks).slice(0, 4);
-        
-        if (isHighAqi) picks = picks.map(p => p + ' (low exertion)');
-        if (isSr120Closed) picks.unshift('Use SR-140 or SR-41 for entry—avoid Tioga Pass.');
-        
-        // Update picks HTML
-        const picksList = document.getElementById('picks-list');
-        picksList.innerHTML = picks.map(p => `<li>${p}</li>`).join('');
-        
-        console.log('All dynamic data loaded successfully!'); // Debug
-        
+        if (dynamicIsHighAqi) picks = picks.map(p => p + ' (low exertion)');
+        if (staticRoads.isSr120Closed) picks.unshift('Use SR-140 or SR-41 for entry—avoid Tioga Pass.');
+        document.getElementById('picks-list').innerHTML = picks.map(p => '<li>' + p + '</li>').join('');
+        console.log('Dynamic load OK');
       } catch (error) {
-        console.error('Global dynamic fetch error:', error); // Detailed log
-        // Per-section fallbacks already handled in promises
+        console.error('Dynamic error:', error);
+        document.getElementById('current-weather').innerHTML = '<strong>Current:</strong> Error loading.';
+        document.getElementById('daily-weather').innerHTML = '<strong>Daily:</strong> Error loading.';
+        document.getElementById('aqi-content').innerHTML = 'Error loading AQI.';
+        document.getElementById('picks-list').innerHTML = '<li>Error loading picks.</li>';
       }
     }
     window.onload = fetchDynamicData;
