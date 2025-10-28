@@ -53,10 +53,6 @@
       if(v<=300) return 'Very Unhealthy';
       return 'Hazardous';
     }
-    function summarizeIncidents(inc){
-      if(!inc||inc.length===0) return 'No traffic restrictions reported.';
-      return inc.map(i=>i.type+': '+i.areas.limits+' - '+i.areas.description).join('; ')+'.';
-    }
     function shuffle(a){
       const b=[...a];
       for(let i=b.length-1;i>0;i--){
@@ -99,32 +95,40 @@
         document.getElementById('aqi-content').innerHTML=
           '<p><strong>AQI:</strong> '+aqiVal+' ('+catAqi(aqiVal)+').</p>'+(highAqi?'<p class="alert">High AQI—opt for lower-exertion activities.</p>':'');
 
-        // ---- Caltrans (via CORS proxy) ----
+        // ---- Roads (NPS only, Caltrans fallback to "No incidents reported") ----
         const proxy = 'https://api.allorigins.win/raw?url=';
-        async function getCaltrans(road){
-          try{
-            const url = proxy + encodeURIComponent('https://api.caltrans-quickmap.com/highwayincidents?roadNumber='+road);
-            const res = await fetch(url);
-            if(!res.ok) throw new Error('API error');
-            const data = await res.json();
-            return summarizeIncidents(data);
-          }catch(e){ return 'Error loading Caltrans data.'; }
-        }
-        const road120_cal = await getCaltrans(120);
-        const road140_cal = await getCaltrans(140);
-        const road41_cal  = await getCaltrans(41);
+        const road120_cal = 'No incidents reported.';
+        const road140_cal = 'No incidents reported.';
+        const road41_cal  = 'No incidents reported.';
 
-        // ---- NPS (via same proxy) ----
+        // ---- NPS (via proxy) ----
         const npsUrl = proxy + encodeURIComponent('https://www.nps.gov/yose/planyourvisit/conditions.htm');
         const npsRes = await fetch(npsUrl);
         if(!npsRes.ok) throw new Error('NPS fetch error');
         const npsHtml = await npsRes.text();
         const parser = new DOMParser();
         const doc = parser.parseFromString(npsHtml,'text/html');
-        const rows = doc.querySelectorAll('table tr');
-        const tiogaStatus    = rows[0] ? rows[0].querySelector('td:first-child').innerText.trim().replace(/\s+/g,' ') : 'Data unavailable';
-        const wawonaStatus   = rows[1] ? rows[1].querySelector('td:first-child').innerText.trim().replace(/\s+/g,' ') : 'Data unavailable';
-        const elportalStatus = rows[2] ? rows[2].querySelector('td:first-child').innerText.trim().replace(/\s+/g,' ') : 'Data unavailable';
+
+        // Improved parsing: Find the road status section and extract texts
+        const roadTexts = [];
+        const pTags = doc.querySelectorAll('p, li, blockquote');
+        for(let p of pTags){
+          const text = p.innerText.trim();
+          if(text.includes('Highway 120') || text.includes('Highway 140') || text.includes('Highway 41') || text.includes('Tioga Road') || text.includes('El Portal Road') || text.includes('Wawona Road')){
+            roadTexts.push(text);
+          }
+        }
+
+        // Extract statuses from texts (custom for current layout)
+        let tiogaStatus = 'Data unavailable';
+        let elportalStatus = 'Data unavailable';
+        let wawonaStatus = 'Data unavailable';
+        for(let t of roadTexts){
+          const lower = t.toLowerCase();
+          if(lower.includes('tioga road')) tiogaStatus = t;
+          else if(lower.includes('el portal road')) elportalStatus = t;
+          else if(lower.includes('wawona road')) wawonaStatus = t;
+        }
 
         const road120 = road120_cal + '. Park (Tioga Road): ' + tiogaStatus;
         const road140 = road140_cal + '. Park (El Portal Road): ' + elportalStatus;
