@@ -14,6 +14,8 @@
     .alert{color:#b30000;font-weight:bold;}
     nav{background:#2e5236;color:white;padding:10px;}
     nav a{color:white;margin-right:10px;}
+    .status-open { color: #2e7d32; font-weight: bold; }
+    .status-closed { color: #c62828; font-weight: bold; }
   </style>
 </head>
 <body>
@@ -79,6 +81,23 @@
         if (!match) return '';
         return match[0].replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
     }
+    
+    function setStatus(elId, calText, npsText) {
+        const el = document.getElementById(elId);
+        if(!el) return;
+        
+        const fullText = (calText || 'No report') + '. Park: ' + (npsText || 'Check nps.gov');
+        el.innerText = fullText;
+        
+        // Visual Coloring Logic
+        el.className = ''; // reset
+        const lower = fullText.toLowerCase();
+        if (lower.includes('closed') || lower.includes('closure') || lower.includes('chain control') || lower.includes('restriction')) {
+             el.classList.add('status-closed');
+        } else if (lower.includes('open') || lower.includes('no traffic restrictions')) {
+             el.classList.add('status-open');
+        }
+    }
 
     // ---------- Main dynamic loader ----------
     async function fetchDynamicData(){
@@ -135,10 +154,10 @@
                  const nps140 = parseNpsConditions(nps, 'El Portal Road');
                  const nps41  = parseNpsConditions(nps, 'Wawona Road');
                  
-                 // Update DOM if we got data
-                 if(txt120) document.getElementById('road-120-text').innerText = txt120 + '. Park: ' + (nps120 || 'Check nps.gov');
-                 if(txt140) document.getElementById('road-140-text').innerText = txt140 + '. Park: ' + (nps140 || 'Check nps.gov');
-                 if(txt41)  document.getElementById('road-41-text').innerText  = txt41  + '. Park: ' + (nps41  || 'Check nps.gov');
+                 // Update DOM and Colors
+                 setStatus('road-120-text', txt120, nps120);
+                 setStatus('road-140-text', txt140, nps140);
+                 setStatus('road-41-text',  txt41,  nps41);
                  
              } catch(e) { console.error('Client-side road update failed', e); }
         }
