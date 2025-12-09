@@ -5,29 +5,123 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Yosemite Day Planner</title>
   <link rel="icon" href="data:,">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8802535839575365" crossorigin="anonymous"></script>
   <style>
-    body{font-family:Arial,sans-serif;margin:20px;background:#f5f5f5;color:#333;}
-    h1,h2{color:#2e5236;}
-    section{margin-bottom:20px;padding:15px;background:#fff;border-radius:8px;box-shadow:0 2px 4px rgba(0,0,0,0.1);}
-    ul{padding-left:20px;}
-    .alert{color:#b30000;font-weight:bold;}
-    nav{background:#2e5236;color:white;padding:10px;}
-    nav a{color:white;margin-right:10px;}
-    .status-open { color: #2e7d32; font-weight: bold; }
-    .status-closed { color: #c62828; font-weight: bold; }
+    :root {
+      --primary: #2e5236;
+      --primary-dark: #1e3624;
+      --bg: #f4f7f5;
+      --card-bg: #ffffff;
+      --text-main: #2d3748;
+      --text-muted: #718096;
+      --accent: #d4a373;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      background: var(--bg);
+      color: var(--text-main);
+      line-height: 1.6;
+    }
+    nav {
+      background: var(--primary);
+      padding: 1rem 2rem;
+      box-shadow: var(--shadow);
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+    nav a {
+      color: rgba(255,255,255,0.9);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: color 0.2s;
+    }
+    nav a:hover { color: #fff; text-decoration: underline; }
+    
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+    
+    h1 {
+      text-align: center;
+      color: var(--primary);
+      margin-bottom: 40px;
+      font-size: 2.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    
+    section {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 24px 30px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow);
+      transition: transform 0.2s ease;
+      border: 1px solid rgba(0,0,0,0.05);
+    }
+    section:hover {
+      transform: translateY(-2px);
+    }
+    
+    h2 {
+      color: var(--primary);
+      margin-top: 0;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #edf2f7;
+      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    ul { padding-left: 20px; margin-bottom: 0; }
+    li { margin-bottom: 8px; }
+    
+    .alert { color: #e53e3e; font-weight: 600; background: #fff5f5; padding: 10px; border-radius: 6px; border-left: 4px solid #e53e3e; }
+    
+    .status-open { 
+      color: #276749; 
+      font-weight: 700; 
+      background: #f0fff4;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+    .status-closed { 
+      color: #9b2c2c; 
+      font-weight: 700; 
+      background: #fff5f5;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+    
+    /* Adsense spacing */
+    ins.adsbygoogle { margin: 20px 0; }
   </style>
 </head>
 <body>
   <nav><a href="/">Home</a> | <a href="/about">About</a> | <a href="/privacy">Privacy</a> | <a href="/contact">Contact</a> | <a href="/disclaimer">Disclaimer</a></nav>
-  <h1>Yosemite Day Planner</h1>
-  <section><h2>Weather</h2><p id="current-weather"><strong>Current:</strong> Loading...</p><p id="daily-weather"><strong>Daily:</strong> Loading...</p></section>
-  <section><h2>Air Quality</h2><div id="aqi-content">Loading...</div></section>
-  <section><h2>Roads</h2><ul id="roads-list"><li><strong>SR-120:</strong> <span id="road-120-text">[IN THE CENTRAL CALIFORNIA AREA & SIERRA NEVADA] Is closed at the Yosemite National Park Boundary /Tioga Pass/ (Tuolumne) - Due to snow - Motorists are advised to use an alternate route [YOSEMITE NAT'L PARK] For Yosenite Nat'l Park road information call 209-372-0200</span></li><li><strong>SR-140:</strong> <span id="road-140-text">[IN THE CENTRAL CALIFORNIA AREA] No traffic restrictions are reported for this area.</span></li><li><strong>SR-41:</strong> <span id="road-41-text">[IN THE CENTRAL CALIFORNIA AREA] No traffic restrictions are reported for this area.</span></li></ul></section>
-  <section><h2>Today's Picks</h2><ul id="picks-list"><li>Loading...</li></ul></section>
-  <section><h2>News</h2><ul><li><a href="https://news.google.com/rss/articles/CBMinwFBVV95cUxOMEFPSm5sbUZEZ3Z1M21meW1Yb0Rab2lrNkNtS1BvbU1iTW53MXBib1A5Q3Fkc0g4dTVnR2tGSmd5VnE0Wm50em40WWpkQmpJSUNraWN0WTRUSjNHd3lqVGpoN2NOXzR4ekNsWEpORUpSb0pGWFZoVjQ3aU1XLVoyQWMyc0dLOWc0c0x2a3g5M2FFbEViVHh3N0tVZVVRYzQ?oc=5">Nearly 1,000 acres near Yosemite returned to California tribe - SFGATE</a> (12/3/2025)</li><li><a href="https://news.google.com/rss/articles/CBMifEFVX3lxTFBGOF8tbG9MOF9vdDNLQWVJRzltWEg1d21UVGxWRm5OcF9fNU1VUmVDcmZLbEFybFJXbjFzemZYR3g5YkZBVDJFZW9hQUxsSm0xTHhKYVZ1YmxzVEZQVGFIbkJOdWxfT0t5NzhKRldROFhNUTkxdWlQRkpDQUvSAXxBVV95cUxPbS1lU0YwNDVtdENsUVZiWnF3cHU3ZmxNbHdHekkzaDc2cllZRkhtQjJJUTJwaVd4TUM3d2JpYkhPRkYzcmhHUkJfWjY5N1UtY2RraVg5a3E3Y3lQVDFxWVA5RElKZGM3VmNFbFNtSnhZTjJTRW15UWFEOUtQ?oc=5">Native American tribe reclaims 900 acres near Yosemite National Park in California - Fresno Bee</a> (12/4/2025)</li><li><a href="https://news.google.com/rss/articles/CBMiqwFBVV95cUxOQ0t2cDlVRXVPY1JkUHRIZG9jaUgycXFLMlJpVDRDTVJjeEwxZFZJZzMxUmxOU1JuRDdlN29nSkE5RHdPT1pRcTVUNFI3VkJCZ3hnWWxGaDZQaEY2aEhVbjRGWlI1UzNsa0hFR0tvOVVUbTBjU3ZFY0p6M2ZVUWlHS1BhSVR6eVZuQUwyLUhVcjBGQmNpTUJUZmlZcHA2RTRtaTRKVkgwelh1OFE?oc=5">Native American tribe reclaims land at the edge of Yosemite National Park - San Francisco Chronicle</a> (12/2/2025)</li><li><a href="https://news.google.com/rss/articles/CBMijgFBVV95cUxNMTRiMUZpUmp5UkN1WW12dTMyZjhHc29lLVFFeTFpWEdyTC1OOXZCVTlDczFQaF9SczN3ekgyOFVWdWxLeFhTU1dhVzdrS2h4R0E5eDVtb3JqT2doWnpXYVJ6Y0hhQWtCakN6cllIbFNwczNfSmdOc0NHOHJjb2wzYjVNQWI3SlNOblRPcEV30gGTAUFVX3lxTE5mbXhYdGc4dWluU3MxbDBLbDNHOEVycmFuRGJ1X05RV3FYWWlVWFdwVmdLQWFHeWFIS3ZyQ3lXSy1mYm1KZ3dKSVJaVkdhN3J0RE05RUVOd0haNHVKUkxrVWlLNEhSaGl3VTJBWldCQ19CRUVhOUozQTQtR1JNdFlCZFpIY0ptUV9tYnVhbkI3WGk2dw?oc=5">Historic Bracebridge Dinner at Yosemite's Ahwahnee Hotel - ABC30 Fresno</a> (12/8/2025)</li><li><a href="https://news.google.com/rss/articles/CBMiuAFBVV95cUxPX1FyQ01Ibl9JTGtaOWxXanFJTjB6cDdtRUxIMFNyX1RfUzg1d1MyZTJ2WEtUV29vVGcwMWpUOS05UThad1AzLXZ1M0hjdU05OWlBTVVnbjBxMl9fWUZPak9HaGJPZ2hxbXhWQ1gyNFZVeTJxb05pVnViakU0VzdEcy1oM3FuR1hia0R5Y0hFMllTbWxCRWdvUlJkRkRQNmFZSndSYmVMajlEUGtqNzZUWjZINEFRbUJr?oc=5">What We Know About Trump’s $100 National Park Fee for International Tourists - KQED</a> (12/3/2025)</li></ul></section>
-  <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8802535839575365" data-ad-slot="1234567890" data-ad-format="auto" data-full-width-responsive="true"></ins>
-  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  <div class="container">
+    <h1>🏔️ Yosemite Day Planner</h1>
+    <section><h2>☀️ Weather</h2><p id="current-weather"><strong>Current:</strong> Loading...</p><p id="daily-weather"><strong>Daily:</strong> Loading...</p></section>
+    <section><h2>💨 Air Quality</h2><div id="aqi-content">Loading...</div></section>
+    <section><h2>🛣️ Roads</h2><ul id="roads-list"><li><strong>SR-120:</strong> <span id="road-120-text">[IN THE CENTRAL CALIFORNIA AREA & SIERRA NEVADA] Is closed at the Yosemite National Park Boundary /Tioga Pass/ (Tuolumne) - Due to snow - Motorists are advised to use an alternate route [YOSEMITE NAT'L PARK] For Yosenite Nat'l Park road information call 209-372-0200</span></li><li><strong>SR-140:</strong> <span id="road-140-text">[IN THE CENTRAL CALIFORNIA AREA] No traffic restrictions are reported for this area.</span></li><li><strong>SR-41:</strong> <span id="road-41-text">[IN THE CENTRAL CALIFORNIA AREA] No traffic restrictions are reported for this area.</span></li></ul></section>
+    <section><h2>🥾 Today's Picks</h2><ul id="picks-list"><li>Loading...</li></ul></section>
+    <section><h2>📰 News</h2><ul><li><a href="https://news.google.com/rss/articles/CBMinwFBVV95cUxOMEFPSm5sbUZEZ3Z1M21meW1Yb0Rab2lrNkNtS1BvbU1iTW53MXBib1A5Q3Fkc0g4dTVnR2tGSmd5VnE0Wm50em40WWpkQmpJSUNraWN0WTRUSjNHd3lqVGpoN2NOXzR4ekNsWEpORUpSb0pGWFZoVjQ3aU1XLVoyQWMyc0dLOWc0c0x2a3g5M2FFbEViVHh3N0tVZVVRYzQ?oc=5">Nearly 1,000 acres near Yosemite returned to California tribe - SFGATE</a> (12/3/2025)</li><li><a href="https://news.google.com/rss/articles/CBMifEFVX3lxTFBGOF8tbG9MOF9vdDNLQWVJRzltWEg1d21UVGxWRm5OcF9fNU1VUmVDcmZLbEFybFJXbjFzemZYR3g5YkZBVDJFZW9hQUxsSm0xTHhKYVZ1YmxzVEZQVGFIbkJOdWxfT0t5NzhKRldROFhNUTkxdWlQRkpDQUvSAXxBVV95cUxPbS1lU0YwNDVtdENsUVZiWnF3cHU3ZmxNbHdHekkzaDc2cllZRkhtQjJJUTJwaVd4TUM3d2JpYkhPRkYzcmhHUkJfWjY5N1UtY2RraVg5a3E3Y3lQVDFxWVA5RElKZGM3VmNFbFNtSnhZTjJTRW15UWFEOUtQ?oc=5">Native American tribe reclaims 900 acres near Yosemite National Park in California - Fresno Bee</a> (12/4/2025)</li><li><a href="https://news.google.com/rss/articles/CBMiqwFBVV95cUxOQ0t2cDlVRXVPY1JkUHRIZG9jaUgycXFLMlJpVDRDTVJjeEwxZFZJZzMxUmxOU1JuRDdlN29nSkE5RHdPT1pRcTVUNFI3VkJCZ3hnWWxGaDZQaEY2aEhVbjRGWlI1UzNsa0hFR0tvOVVUbTBjU3ZFY0p6M2ZVUWlHS1BhSVR6eVZuQUwyLUhVcjBGQmNpTUJUZmlZcHA2RTRtaTRKVkgwelh1OFE?oc=5">Native American tribe reclaims land at the edge of Yosemite National Park - San Francisco Chronicle</a> (12/2/2025)</li><li><a href="https://news.google.com/rss/articles/CBMijgFBVV95cUxNMTRiMUZpUmp5UkN1WW12dTMyZjhHc29lLVFFeTFpWEdyTC1OOXZCVTlDczFQaF9SczN3ekgyOFVWdWxLeFhTU1dhVzdrS2h4R0E5eDVtb3JqT2doWnpXYVJ6Y0hhQWtCakN6cllIbFNwczNfSmdOc0NHOHJjb2wzYjVNQWI3SlNOblRPcEV30gGTAUFVX3lxTE5mbXhYdGc4dWluU3MxbDBLbDNHOEVycmFuRGJ1X05RV3FYWWlVWFdwVmdLQWFHeWFIS3ZyQ3lXSy1mYm1KZ3dKSVJaVkdhN3J0RE05RUVOd0haNHVKUkxrVWlLNEhSaGl3VTJBWldCQ19CRUVhOUozQTQtR1JNdFlCZFpIY0ptUV9tYnVhbkI3WGk2dw?oc=5">Historic Bracebridge Dinner at Yosemite's Ahwahnee Hotel - ABC30 Fresno</a> (12/8/2025)</li><li><a href="https://news.google.com/rss/articles/CBMiuAFBVV95cUxPX1FyQ01Ibl9JTGtaOWxXanFJTjB6cDdtRUxIMFNyX1RfUzg1d1MyZTJ2WEtUV29vVGcwMWpUOS05UThad1AzLXZ1M0hjdU05OWlBTVVnbjBxMl9fWUZPak9HaGJPZ2hxbXhWQ1gyNFZVeTJxb05pVnViakU0VzdEcy1oM3FuR1hia0R5Y0hFMllTbWxCRWdvUlJkRkRQNmFZSndSYmVMajlEUGtqNzZUWjZINEFRbUJr?oc=5">What We Know About Trump’s $100 National Park Fee for International Tourists - KQED</a> (12/3/2025)</li></ul></section>
+    
+    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8802535839575365" data-ad-slot="1234567890" data-ad-format="auto" data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
 
   <script>
     // ---------- Helper functions ----------
