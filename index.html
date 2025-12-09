@@ -5,22 +5,28 @@
       --surface: #ffffff;
       --text: #1a202c;
       --text-light: #718096;
-      --accent: #38bdf8;
-      --success: #059669;
-      --danger: #dc2626;
-      --warning: #d97706;
-      --radius: 16px;
       --shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
+    }
+    /* Dark Mode overrides */
+    body.dark-mode {
+      --bg: #111827;
+      --surface: #1f2937;
+      --text: #f3f4f6;
+      --text-light: #9ca3af;
+      --shadow: 0 4px 6px -1px rgba(0,0,0,0.5);
     }
     
     * { box-sizing: border-box; }
-    body { font-family: 'Inter', sans-serif; margin: 0; background: var(--bg); color: var(--text); padding-bottom: 40px; }
+    body { font-family: 'Inter', sans-serif; margin: 0; background: var(--bg); color: var(--text); padding-bottom: 40px; transition: background 0.3s, color 0.3s; }
     
     /* Nav */
     .main-nav { background: var(--primary); color: white; padding: 0.75rem 0; position: sticky; top: 0; z-index: 50; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
     .nav-content { max-width: 1100px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; }
-    .nav-links a { color: rgba(255,255,255,0.85); text-decoration: none; margin-left: 20px; font-weight: 500; font-size: 0.9rem; }
+    .nav-links { display: flex; align-items: center; gap: 15px; }
+    .nav-links a { color: rgba(255,255,255,0.85); text-decoration: none; font-weight: 500; font-size: 0.9rem; }
     .nav-links a:hover { color: white; }
+    #mode-toggle { background: none; border: 1px solid rgba(255,255,255,0.3); color: white; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: background 0.2s; }
+    #mode-toggle:hover { background: rgba(255,255,255,0.1); }
 
     /* Layout */
     .container { max-width: 1100px; margin: 20px auto; padding: 0 20px; }
@@ -29,27 +35,33 @@
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 20px;
+      grid-auto-flow: dense; /* Helps fill gaps */
     }
     
     /* Widgets Common */
-    .widget { background: var(--surface); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); display: flex; flex-direction: column; }
+    .widget { background: var(--surface); border-radius: 16px; padding: 20px; box-shadow: var(--shadow); display: flex; flex-direction: column; transition: background 0.3s; }
     .widget h2 { 
-      font-size: 1.1rem; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 15px 0; display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 0.85rem;
+      font-size: 0.9rem; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 15px 0; display: flex; align-items: center; gap: 8px; font-weight: 700;
     }
     .full-width { grid-column: 1 / -1; }
+    .double-width { grid-column: span 2; }
+    @media(max-width: 768px) { .double-width { grid-column: 1 / -1; } }
     
     /* Specific Widgets */
     .hero-widget { background: linear-gradient(135deg, #1e3624 0%, #2e5236 100%); color: white; }
-    .hero-widget h2 { color: rgba(255,255,255,0.9); border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
-    .status-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-    .status-item { background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px; font-size: 0.95rem; display: flex; align-items: center; gap: 10px; }
-    .road-badge { background: rgba(255,255,255,0.15); padding: 2px 6px; border-radius: 4px; font-weight: 700; font-size: 0.8rem; letter-spacing: 0.05em; }
-    .status-open { color: #6ee7b7; font-weight: 600; }
-    .status-closed { color: #fca5a5; font-weight: 600; }
+    .hero-widget h2 { color: rgba(255,255,255,0.9); border-bottom: 1px solid rgba(255,255,255,0.1); }
+    
+    /* Optimized Road Status Grid */
+    .status-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
+    .status-item { background: rgba(0,0,0,0.2); padding: 15px; border-radius: 12px; font-size: 0.95rem; display: flex; flex-direction: column; gap: 8px; }
+    .road-badge { align-self: flex-start; background: rgba(255,255,255,0.15); padding: 4px 8px; border-radius: 6px; font-weight: 700; font-size: 0.85rem; letter-spacing: 0.05em; }
+    .status-text { font-size: 1rem; line-height: 1.4; font-weight: 500; }
+    .status-open { color: #6ee7b7; }
+    .status-closed { color: #fca5a5; }
     
     /* Weather */
-    .weather-display { font-size: 1.1rem; font-weight: 600; margin-bottom: 5px; }
-    .weather-details { font-size: 0.9rem; color: var(--text-light); line-height: 1.5; }
+    .weather-display { font-size: 2rem; font-weight: 700; margin-bottom: 5px; }
+    .weather-details { font-size: 0.95rem; color: var(--text-light); line-height: 1.5; }
     
     /* Webcams */
     .webcam-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
@@ -60,34 +72,50 @@
     @media(max-width: 600px) { .webcam-grid { grid-template-columns: 1fr; } }
 
     /* AQI / Small */
-    .big-value { font-size: 1.8rem; font-weight: 700; color: var(--primary); }
+    .big-value { font-size: 2.2rem; font-weight: 700; color: #2e5236; }
+    body.dark-mode .big-value { color: #6ee7b7; } /* Dark mode adaptation */
+    
     .tag-green { background: #d1fae5; color: #065f46; padding: 3px 8px; border-radius: 12px; font-size: 0.85rem; font-weight: 600; }
     .tag-orange { background: #ffedd5; color: #9a3412; padding: 3px 8px; border-radius: 12px; font-size: 0.85rem; font-weight: 600; }
     .tag-red { background: #fee2e2; color: #991b1b; padding: 3px 8px; border-radius: 12px; font-size: 0.85rem; font-weight: 600; }
     
     /* Lists */
     .compact-list { list-style: none; padding: 0; margin: 0; }
-    .compact-list li { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f0f0f0; }
+    .compact-list li { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(0,0,0,0.05); }
+    body.dark-mode .compact-list li { border-bottom: 1px solid rgba(255,255,255,0.05); }
     .compact-list li:last-child { border: none; }
     
     .news-list { list-style: none; padding: 0; margin: 0; }
-    .news-list li { margin-bottom: 12px; font-size: 0.95rem; }
-    .news-list a { color: var(--text); text-decoration: none; font-weight: 500; display: block; }
-    .news-list a:hover { color: var(--primary); text-decoration: underline; }
+    .news-list li { margin-bottom: 15px; font-size: 0.95rem; }
+    .news-list a { color: var(--text); text-decoration: none; font-weight: 600; display: block; margin-bottom: 4px; }
+    .news-list a:hover { color: #38bdf8; text-decoration: underline; }
     .news-list .date { font-size: 0.8rem; color: var(--text-light); }
 
     /* Footer */
-    .site-footer { text-align: center; margin-top: 60px; color: var(--text-light); font-size: 0.9rem; padding: 20px; border-top: 1px solid #e5e7eb; }
+    .site-footer { text-align: center; margin-top: 60px; color: var(--text-light); font-size: 0.9rem; padding: 20px; border-top: 1px solid rgba(0,0,0,0.1); }
     .site-footer a { color: var(--text-light); }
     
     /* Cookie */
     .cookie-banner { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #1f2937; color: white; padding: 12px 24px; border-radius: 50px; display: none; align-items: center; gap: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 100; width: 90%; max-width: 400px; }
-    .cookie-banner button { background: var(--success); color: white; border: none; padding: 6px 16px; border-radius: 20px; cursor: pointer; font-weight: 600; }
+    .cookie-banner button { background: #059669; color: white; border: none; padding: 6px 16px; border-radius: 20px; cursor: pointer; font-weight: 600; }
 
     /* Guide */
-    .guide-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; font-size: 0.95rem; }
+    .guide-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; font-size: 1rem; line-height: 1.7; }
     @media(max-width: 768px) { .guide-columns { grid-template-columns: 1fr; } }
-</style></head><body><nav class="main-nav"><div class="nav-content"><strong>🏔️ Yosemite Daily</strong><div class="nav-links"><a href="/about">About</a><a href="/contact">Contact</a></div></div></nav>  <div class="container">    <div class="dashboard-grid">      <div class="full-width"><div class="widget hero-widget" id="status-widget"><div class="status-header"><h2>🚧 Road Status & Chains</h2><span id="update-time" style="font-size:0.8rem;opacity:0.8;font-weight:normal">Updating...</span></div><div class="status-grid">  <div class="status-item"><span class="road-badge">SR-120</span> <span id="road-120-text">[IN THE CENTRAL CALIFORNIA AREA & SIERRA NEVADA] Is closed at the Yosemite National Park Boundary /Tioga Pass/ (Tuolumne) - Due to snow - Motorists are advised to use an alternate route [YOSEMITE NAT'L PARK] For Yosenite Nat'l Park road information call 209-372-0200</span></div>  <div class="status-item"><span class="road-badge">SR-140</span> <span id="road-140-text">[IN THE CENTRAL CALIFORNIA AREA] No traffic restrictions are reported for this area.</span></div>  <div class="status-item"><span class="road-badge">SR-41</span> <span id="road-41-text">[IN THE CENTRAL CALIFORNIA AREA] No traffic restrictions are reported for this area.</span></div>  <div class="status-item chain-item"><span class="road-badge icon">⛓️</span> <strong>Chains:</strong> <span id="chains-text">Loading...</span></div></div></div></div><div class="widget" id="weather-widget"><h2>☀️ Weather</h2><div id="current-weather" class="weather-display">Loading...</div><div id="daily-weather" class="weather-details">Loading...</div></div><div class="widget small-widget"><h2>💨 Air Quality</h2><div id="aqi-content" class="big-value">Loading...</div></div><div class="widget small-widget"><h2>⛺ Camping</h2><ul class="compact-list">  <li><strong>Upper Pines:</strong> <span class="tag-red">Full</span></li>  <li><strong>Camp 4:</strong> <span class="tag-orange">Lottery</span></li>  <li style="font-size:0.8em; color:#666; margin-top:5px;">*Demo Data</li></ul></div><div class="widget small-widget"><h2>✨ Sky Guide</h2><div id="astro-content">  <div><strong>🌅 Sunrise:</strong> <span id="sunrise-val">--:--</span></div>  <div><strong>🌇 Sunset:</strong> <span id="sunset-val">--:--</span></div>  <div style="margin-top:8px;"><strong>🔭 Stargazing:</strong> <span id="star-val">Good</span></div></div></div><div class="widget full-width" id="webcams-widget"><h2>📸 Live Webcams</h2><div class="webcam-grid">  <a href="https://yosemite.org/webcams/yosemite-falls/" target="_blank" class="webcam-card">    <div class="cam-label">Yosemite Falls</div>    <img src="https://images.unsplash.com/photo-1532274402911-5a369e4c4bb5?w=600&q=80" alt="Yosemite Falls">  </a>  <a href="https://yosemite.org/webcams/half-dome/" target="_blank" class="webcam-card">    <div class="cam-label">Half Dome</div>    <img src="https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=600&q=80" alt="Half Dome">  </a></div></div><div class="widget" id="picks-widget"><h2>🥾 Today's Picks</h2><ul id="picks-list"><li>Loading...</li></ul></div><div class="widget" id="news-widget"><h2>📰 News</h2><ul class="news-list"><li><a href="https://news.google.com/rss/articles/CBMinwFBVV95cUxOMEFPSm5sbUZEZ3Z1M21meW1Yb0Rab2lrNkNtS1BvbU1iTW53MXBib1A5Q3Fkc0g4dTVnR2tGSmd5VnE0Wm50em40WWpkQmpJSUNraWN0WTRUSjNHd3lqVGpoN2NOXzR4ekNsWEpORUpSb0pGWFZoVjQ3aU1XLVoyQWMyc0dLOWc0c0x2a3g5M2FFbEViVHh3N0tVZVVRYzQ?oc=5">Nearly 1,000 acres near Yosemite returned to California tribe - SFGATE</a> <span class="date">Dec 3</span></li><li><a href="https://news.google.com/rss/articles/CBMifEFVX3lxTFBGOF8tbG9MOF9vdDNLQWVJRzltWEg1d21UVGxWRm5OcF9fNU1VUmVDcmZLbEFybFJXbjFzemZYR3g5YkZBVDJFZW9hQUxsSm0xTHhKYVZ1YmxzVEZQVGFIbkJOdWxfT0t5NzhKRldROFhNUTkxdWlQRkpDQUvSAXxBVV95cUxPbS1lU0YwNDVtdENsUVZiWnF3cHU3ZmxNbHdHekkzaDc2cllZRkhtQjJJUTJwaVd4TUM3d2JpYkhPRkYzcmhHUkJfWjY5N1UtY2RraVg5a3E3Y3lQVDFxWVA5RElKZGM3VmNFbFNtSnhZTjJTRW15UWFEOUtQ?oc=5">Native American tribe reclaims 900 acres near Yosemite National Park in California - Fresno Bee</a> <span class="date">Dec 4</span></li><li><a href="https://news.google.com/rss/articles/CBMiqwFBVV95cUxOQ0t2cDlVRXVPY1JkUHRIZG9jaUgycXFLMlJpVDRDTVJjeEwxZFZJZzMxUmxOU1JuRDdlN29nSkE5RHdPT1pRcTVUNFI3VkJCZ3hnWWxGaDZQaEY2aEhVbjRGWlI1UzNsa0hFR0tvOVVUbTBjU3ZFY0p6M2ZVUWlHS1BhSVR6eVZuQUwyLUhVcjBGQmNpTUJUZmlZcHA2RTRtaTRKVkgwelh1OFE?oc=5">Native American tribe reclaims land at the edge of Yosemite National Park - San Francisco Chronicle</a> <span class="date">Dec 2</span></li><li><a href="https://news.google.com/rss/articles/CBMiiAFBVV95cUxNc1VWeXlsVXFhWm1HM2U4d0R3OWpKajFwUWdLU21uMzEwZFBZTTZtSEZNX05Qa2hsbjBzVDBkWGdGQ3J3LW51OF9XTDU1Z1pmcDRVc1hUdHZwdTk3dHdxSjF2Y2ZfY3FFc3NNSDRlOWpSWGhMMGFTSXZNV0hPcjdyOVExMWJtVHJR?oc=5">‘A Sanctuary for Our People’—A Displaced Tribe Just Reclaimed Ancestral Territory Near Yosemite - Outside Magazine</a> <span class="date">Dec 3</span></li><li><a href="https://news.google.com/rss/articles/CBMiuAFBVV95cUxPX1FyQ01Ibl9JTGtaOWxXanFJTjB6cDdtRUxIMFNyX1RfUzg1d1MyZTJ2WEtUV29vVGcwMWpUOS05UThad1AzLXZ1M0hjdU05OWlBTVVnbjBxMl9fWUZPak9HaGJPZ2hxbXhWQ1gyNFZVeTJxb05pVnViakU0VzdEcy1oM3FuR1hia0R5Y0hFMllTbWxCRWdvUlJkRkRQNmFZSndSYmVMajlEUGtqNzZUWjZINEFRbUJr?oc=5">What We Know About Trump’s $100 National Park Fee for International Tourists - KQED</a> <span class="date">Dec 3</span></li></ul></div><div class="widget full-width"><h2>🌲 Visitor Guide</h2><div class="guide-columns">  <p><strong>Planning Your Trip:</strong> Yosemite Valley is accessible year-round via Highway 140. Tioga Road (Hwy 120) closes in winter. Always carry chains Nov-April.</p>  <p><strong>Best Times:</strong> May-June for waterfalls, Sept-Oct for hiking. Summer requires reservations.</p></div></div>    </div>    <div style="margin: 40px 0; text-align: center;">      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8802535839575365" data-ad-slot="1234567890" data-ad-format="auto" data-full-width-responsive="true"></ins>      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>    </div><footer class="site-footer"><p>&copy; 2025 Yosemite Day Planner. Unofficial Guide.</p><p><a href="/about">About</a> | <a href="/privacy">Privacy</a> | <a href="/disclaimer">Disclaimer</a> | <a href="/contact">Contact</a></p></footer>  </div><div id="cookie-banner" class="cookie-banner"><span>We use cookies to improve your experience.</span><button onclick="acceptCookies()">Accept</button></div>  <script>
+</style></head><body><nav class="main-nav"><div class="nav-content"><strong>🏔️ Yosemite Daily</strong><div class="nav-links"><button onclick="toggleDarkMode()" id="mode-toggle">🌙</button><a href="/about">About</a><a href="/contact">Contact</a></div></div></nav>  <div class="container">    <div class="dashboard-grid">      <div class="full-width"><div class="widget hero-widget" id="status-widget"><div class="status-header"><h2>🚧 Road Status & Chains</h2><span id="update-time" style="font-size:0.8rem;opacity:0.8;font-weight:normal">Updating...</span></div><div class="status-grid">  <div class="status-item"><span class="road-badge">SR-120</span> <span id="road-120-text" class="status-text">[IN THE CENTRAL CALIFORNIA AREA & SIERRA NEVADA] Is closed at the Yosemite National Park Boundary /Tioga Pass/ (Tuolumne) - Due to snow - Motorists are advised to use an alternate route [YOSEMITE NAT'L PARK] For Yosenite Nat'l Park road information call 209-372-0200</span></div>  <div class="status-item"><span class="road-badge">SR-140</span> <span id="road-140-text" class="status-text">[IN THE CENTRAL CALIFORNIA AREA] No traffic restrictions are reported for this area.</span></div>  <div class="status-item"><span class="road-badge">SR-41</span> <span id="road-41-text" class="status-text">[IN THE CENTRAL CALIFORNIA AREA] No traffic restrictions are reported for this area.</span></div>  <div class="status-item chain-item"><span class="road-badge icon">⛓️</span> <strong>Chains:</strong> <span id="chains-text">Loading...</span></div></div></div></div><div class="widget" id="weather-widget"><h2>☀️ Weather</h2><div id="current-weather" class="weather-display">Loading...</div><div id="daily-weather" class="weather-details">Loading...</div></div><div class="widget small-widget"><h2>💨 Air Quality</h2><div id="aqi-content" class="big-value">Loading...</div></div><div class="widget small-widget"><h2>⛺ Camping</h2><ul class="compact-list">  <li><strong>Upper Pines:</strong> <span class="tag-red">Full</span></li>  <li><strong>Camp 4:</strong> <span class="tag-orange">Lottery</span></li>  <li style="font-size:0.8em; color:#666; margin-top:5px;">*Demo Data</li></ul></div><div class="widget small-widget"><h2>✨ Sky Guide</h2><div id="astro-content">  <div><strong>🌅 Sunrise:</strong> <span id="sunrise-val">--:--</span></div>  <div><strong>🌇 Sunset:</strong> <span id="sunset-val">--:--</span></div>  <div style="margin-top:8px;"><strong>🔭 Stargazing:</strong> <span id="star-val">Good</span></div></div></div><div class="widget double-width" id="webcams-widget"><h2>📸 Live Webcams</h2><div class="webcam-grid">  <a href="https://yosemite.org/webcams/yosemite-falls/" target="_blank" class="webcam-card">    <div class="cam-label">Yosemite Falls</div>    <img src="https://images.unsplash.com/photo-1532274402911-5a369e4c4bb5?w=600&q=80" alt="Yosemite Falls">  </a>  <a href="https://yosemite.org/webcams/half-dome/" target="_blank" class="webcam-card">    <div class="cam-label">Half Dome</div>    <img src="https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=600&q=80" alt="Half Dome">  </a></div></div><div class="widget" id="picks-widget"><h2>🥾 Today's Picks</h2><ul id="picks-list"><li>Loading...</li></ul></div><div class="widget" id="news-widget"><h2>📰 News</h2><ul class="news-list"><li><a href="https://news.google.com/rss/articles/CBMinwFBVV95cUxOMEFPSm5sbUZEZ3Z1M21meW1Yb0Rab2lrNkNtS1BvbU1iTW53MXBib1A5Q3Fkc0g4dTVnR2tGSmd5VnE0Wm50em40WWpkQmpJSUNraWN0WTRUSjNHd3lqVGpoN2NOXzR4ekNsWEpORUpSb0pGWFZoVjQ3aU1XLVoyQWMyc0dLOWc0c0x2a3g5M2FFbEViVHh3N0tVZVVRYzQ?oc=5">Nearly 1,000 acres near Yosemite returned to California tribe - SFGATE</a> <span class="date">Dec 3</span></li><li><a href="https://news.google.com/rss/articles/CBMifEFVX3lxTFBGOF8tbG9MOF9vdDNLQWVJRzltWEg1d21UVGxWRm5OcF9fNU1VUmVDcmZLbEFybFJXbjFzemZYR3g5YkZBVDJFZW9hQUxsSm0xTHhKYVZ1YmxzVEZQVGFIbkJOdWxfT0t5NzhKRldROFhNUTkxdWlQRkpDQUvSAXxBVV95cUxPbS1lU0YwNDVtdENsUVZiWnF3cHU3ZmxNbHdHekkzaDc2cllZRkhtQjJJUTJwaVd4TUM3d2JpYkhPRkYzcmhHUkJfWjY5N1UtY2RraVg5a3E3Y3lQVDFxWVA5RElKZGM3VmNFbFNtSnhZTjJTRW15UWFEOUtQ?oc=5">Native American tribe reclaims 900 acres near Yosemite National Park in California - Fresno Bee</a> <span class="date">Dec 4</span></li><li><a href="https://news.google.com/rss/articles/CBMiiAFBVV95cUxNc1VWeXlsVXFhWm1HM2U4d0R3OWpKajFwUWdLU21uMzEwZFBZTTZtSEZNX05Qa2hsbjBzVDBkWGdGQ3J3LW51OF9XTDU1Z1pmcDRVc1hUdHZwdTk3dHdxSjF2Y2ZfY3FFc3NNSDRlOWpSWGhMMGFTSXZNV0hPcjdyOVExMWJtVHJR?oc=5">‘A Sanctuary for Our People’—A Displaced Tribe Just Reclaimed Ancestral Territory Near Yosemite - Outside Magazine</a> <span class="date">Dec 3</span></li><li><a href="https://news.google.com/rss/articles/CBMiqwFBVV95cUxOQ0t2cDlVRXVPY1JkUHRIZG9jaUgycXFLMlJpVDRDTVJjeEwxZFZJZzMxUmxOU1JuRDdlN29nSkE5RHdPT1pRcTVUNFI3VkJCZ3hnWWxGaDZQaEY2aEhVbjRGWlI1UzNsa0hFR0tvOVVUbTBjU3ZFY0p6M2ZVUWlHS1BhSVR6eVZuQUwyLUhVcjBGQmNpTUJUZmlZcHA2RTRtaTRKVkgwelh1OFE?oc=5">Native American tribe reclaims land at the edge of Yosemite National Park - San Francisco Chronicle</a> <span class="date">Dec 2</span></li><li><a href="https://news.google.com/rss/articles/CBMiuAFBVV95cUxPX1FyQ01Ibl9JTGtaOWxXanFJTjB6cDdtRUxIMFNyX1RfUzg1d1MyZTJ2WEtUV29vVGcwMWpUOS05UThad1AzLXZ1M0hjdU05OWlBTVVnbjBxMl9fWUZPak9HaGJPZ2hxbXhWQ1gyNFZVeTJxb05pVnViakU0VzdEcy1oM3FuR1hia0R5Y0hFMllTbWxCRWdvUlJkRkRQNmFZSndSYmVMajlEUGtqNzZUWjZINEFRbUJr?oc=5">What We Know About Trump’s $100 National Park Fee for International Tourists - KQED</a> <span class="date">Dec 3</span></li></ul></div><div class="widget full-width"><h2>🌲 Visitor Guide</h2><div class="guide-columns">  <p><strong>Planning Your Trip:</strong> Yosemite Valley is accessible year-round via Highway 140. Tioga Road (Hwy 120) closes in winter. Always carry chains Nov-April.</p>  <p><strong>Best Times:</strong> May-June for waterfalls, Sept-Oct for hiking. Summer requires reservations.</p></div></div>    </div>    <div style="margin: 40px 0; text-align: center;">      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8802535839575365" data-ad-slot="1234567890" data-ad-format="auto" data-full-width-responsive="true"></ins>      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>    </div><footer class="site-footer"><p>&copy; 2025 Yosemite Day Planner. Unofficial Guide.</p><p><a href="/about">About</a> | <a href="/privacy">Privacy</a> | <a href="/disclaimer">Disclaimer</a> | <a href="/contact">Contact</a></p></footer>  </div><div id="cookie-banner" class="cookie-banner"><span>We use cookies to improve your experience.</span><button onclick="acceptCookies()">Accept</button></div>  <script>
+    // ---------- Dark Mode Logic ----------
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        const isDark = document.body.classList.contains('dark-mode');
+        localStorage.setItem('darkMode', isDark);
+        document.getElementById('mode-toggle').innerText = isDark ? '☀️' : '🌙';
+    }
+    // Init Dark Mode
+    if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark-mode');
+        if(document.getElementById('mode-toggle')) document.getElementById('mode-toggle').innerText = '☀️';
+    }
+
     // ---------- Cookie Logic ----------
     function acceptCookies() {
       document.getElementById('cookie-banner').style.display = 'none';
@@ -142,15 +170,15 @@
         const el = document.getElementById(elId);
         if(!el) return;
         const fullText = (calText || 'No report') + (npsText ? '. ' + npsText : '');
-        el.innerText = fullText.length > 60 ? fullText.substring(0, 60) + '...' : fullText;
+        el.innerText = fullText; // Allow full text to show
         
         el.parentElement.className = 'status-item'; // reset
         const lower = fullText.toLowerCase();
         if (lower.includes('closed') || lower.includes('closure') || lower.includes('restriction')) {
-             el.className = 'status-closed';
+             el.className = 'status-text status-closed';
              el.parentElement.style.borderLeft = '4px solid #fca5a5';
         } else {
-             el.className = 'status-open';
+             el.className = 'status-text status-open';
              el.parentElement.style.borderLeft = '4px solid #6ee7b7';
         }
     }
@@ -181,7 +209,7 @@
         // Update Astro Widget
         document.getElementById('sunrise-val').innerText = fmt(day.sunrise?.[0]);
         document.getElementById('sunset-val').innerText = fmt(day.sunset?.[0]);
-        // Simple star logic: if Rain < 10% and Cloud < 20% (proxy)
+        // Simple star logic
         const isClear = (day.precipitation_probability_max?.[0]||0) < 20;
         document.getElementById('star-val').innerHTML = isClear ? '<span class="tag-green">Excellent</span>' : '<span class="tag-orange">Cloudy</span>';
 
@@ -216,12 +244,16 @@
                  setStatus('road-140-text', t140, parseNpsConditions(nps, 'El Portal Road'));
                  setStatus('road-41-text',  t41,  parseNpsConditions(nps, 'Wawona Road'));
                  
-                 // Fake Chains Logic (Mockup for now)
+                 // Fake Chains Logic
                  const season = new Date().getMonth();
-                 if(season > 3 && season < 10) {
-                    document.getElementById('chains-text').innerHTML = '<span class="status-open">Not Required</span>';
+                 const chainsEl = document.getElementById('chains-text');
+                 // Check if any road mentions chains
+                 if ((t120+t140+t41).toLowerCase().includes('chain')) {
+                     chainsEl.innerHTML = '<span class="status-closed">R1/R2 Active</span>';
+                 } else if(season > 3 && season < 10) {
+                     chainsEl.innerHTML = '<span class="status-open">None</span>';
                  } else {
-                    document.getElementById('chains-text').innerHTML = '<span class="status-closed">Carry Chains</span>';
+                     chainsEl.innerHTML = '<span class="status-closed">Carry Chains</span>';
                  }
                  
              } catch(e) { console.error('Roads/Chains update failed', e); }
