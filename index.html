@@ -126,7 +126,7 @@
   </style>
 </head>
 <body>
-  <nav><a href="/">Home</a> | <a href="/about">About</a> | <a href="/privacy">Privacy</a> | <a href="/contact">Contact</a> | <a href="/disclaimer">Disclaimer</a></nav>
+  <nav><a href="/">Home</a> | <a href="/about">About</a> | <a href="/privacy">Privacy</a></nav>
   <div class="container">
     <h1>🏔️ Yosemite Day Planner</h1>
     <section><h2>☀️ Weather</h2><p id="current-weather"><strong>Current:</strong> Loading...</p><p id="daily-weather"><strong>Daily:</strong> Loading...</p></section>
@@ -135,12 +135,25 @@
     <section><h2>📸 Live Webcams</h2><div class="webcam-grid">  <a href="https://yosemite.org/webcams/yosemite-falls/" target="_blank" class="webcam-card">    <h3>Yosemite Falls (Click for Live)</h3>    <img src="https://images.unsplash.com/photo-1532274402911-5a369e4c4bb5?w=600&q=80" alt="Yosemite Falls" style="width:100%;aspect-ratio:16/9;object-fit:cover">  </a>  <a href="https://yosemite.org/webcams/half-dome/" target="_blank" class="webcam-card">    <h3>Half Dome (Click for Live)</h3>    <img src="https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=600&q=80" alt="Half Dome" style="width:100%;aspect-ratio:16/9;object-fit:cover">  </a></div><p style="font-size:0.8em;opacity:0.7;text-align:center;">Live streams hosted by Yosemite Conservancy.</p></section>
     <section><h2>🥾 Today's Picks</h2><ul id="picks-list"><li>Loading...</li></ul></section>
     <section><h2>📰 News</h2><ul><li><a href="https://news.google.com/rss/articles/CBMinwFBVV95cUxOMEFPSm5sbUZEZ3Z1M21meW1Yb0Rab2lrNkNtS1BvbU1iTW53MXBib1A5Q3Fkc0g4dTVnR2tGSmd5VnE0Wm50em40WWpkQmpJSUNraWN0WTRUSjNHd3lqVGpoN2NOXzR4ekNsWEpORUpSb0pGWFZoVjQ3aU1XLVoyQWMyc0dLOWc0c0x2a3g5M2FFbEViVHh3N0tVZVVRYzQ?oc=5">Nearly 1,000 acres near Yosemite returned to California tribe - SFGATE</a> (12/3/2025)</li><li><a href="https://news.google.com/rss/articles/CBMifEFVX3lxTFBGOF8tbG9MOF9vdDNLQWVJRzltWEg1d21UVGxWRm5OcF9fNU1VUmVDcmZLbEFybFJXbjFzemZYR3g5YkZBVDJFZW9hQUxsSm0xTHhKYVZ1YmxzVEZQVGFIbkJOdWxfT0t5NzhKRldROFhNUTkxdWlQRkpDQUvSAXxBVV95cUxPbS1lU0YwNDVtdENsUVZiWnF3cHU3ZmxNbHdHekkzaDc2cllZRkhtQjJJUTJwaVd4TUM3d2JpYkhPRkYzcmhHUkJfWjY5N1UtY2RraVg5a3E3Y3lQVDFxWVA5RElKZGM3VmNFbFNtSnhZTjJTRW15UWFEOUtQ?oc=5">Native American tribe reclaims 900 acres near Yosemite National Park in California - Fresno Bee</a> (12/4/2025)</li><li><a href="https://news.google.com/rss/articles/CBMiqwFBVV95cUxOQ0t2cDlVRXVPY1JkUHRIZG9jaUgycXFLMlJpVDRDTVJjeEwxZFZJZzMxUmxOU1JuRDdlN29nSkE5RHdPT1pRcTVUNFI3VkJCZ3hnWWxGaDZQaEY2aEhVbjRGWlI1UzNsa0hFR0tvOVVUbTBjU3ZFY0p6M2ZVUWlHS1BhSVR6eVZuQUwyLUhVcjBGQmNpTUJUZmlZcHA2RTRtaTRKVkgwelh1OFE?oc=5">Native American tribe reclaims land at the edge of Yosemite National Park - San Francisco Chronicle</a> (12/2/2025)</li><li><a href="https://news.google.com/rss/articles/CBMiuAFBVV95cUxPX1FyQ01Ibl9JTGtaOWxXanFJTjB6cDdtRUxIMFNyX1RfUzg1d1MyZTJ2WEtUV29vVGcwMWpUOS05UThad1AzLXZ1M0hjdU05OWlBTVVnbjBxMl9fWUZPak9HaGJPZ2hxbXhWQ1gyNFZVeTJxb05pVnViakU0VzdEcy1oM3FuR1hia0R5Y0hFMllTbWxCRWdvUlJkRkRQNmFZSndSYmVMajlEUGtqNzZUWjZINEFRbUJr?oc=5">What We Know About Trump’s $100 National Park Fee for International Tourists - KQED</a> (12/3/2025)</li><li><a href="https://news.google.com/rss/articles/CBMijgFBVV95cUxNMTRiMUZpUmp5UkN1WW12dTMyZjhHc29lLVFFeTFpWEdyTC1OOXZCVTlDczFQaF9SczN3ekgyOFVWdWxLeFhTU1dhVzdrS2h4R0E5eDVtb3JqT2doWnpXYVJ6Y0hhQWtCakN6cllIbFNwczNfSmdOc0NHOHJjb2wzYjVNQWI3SlNOblRPcEV30gGTAUFVX3lxTE5mbXhYdGc4dWluU3MxbDBLbDNHOEVycmFuRGJ1X05RV3FYWWlVWFdwVmdLQWFHeWFIS3ZyQ3lXSy1mYm1KZ3dKSVJaVkdhN3J0RE05RUVOd0haNHVKUkxrVWlLNEhSaGl3VTJBWldCQ19CRUVhOUozQTQtR1JNdFlCZFpIY0ptUV9tYnVhbkI3WGk2dw?oc=5">Historic Bracebridge Dinner at Yosemite's Ahwahnee Hotel - ABC30 Fresno</a> (12/8/2025)</li></ul></section>
+    <section><h2>🌲 Visitor Guide</h2><p>Planning a trip to Yosemite National Park requires knowing the latest conditions. Yosemite Valley is accessible year-round via Highway 140 (El Portal Road), while Highway 120 (Tioga Road) and Glacier Point Road are often closed due to snow from November through late May or June.</p><p><strong>Best Time to Visit:</strong> Spring (May-June) offers peak waterfalls, while Fall (September-October) provides cooler temperatures and fewer crowds. Summer is popular but requires reservations on peak dates.</p><p><strong>Safety First:</strong> Always carry tire chains in winter, regardless of vehicle type. Check our live road status above before driving up.</p></section>
     
     <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8802535839575365" data-ad-slot="1234567890" data-ad-format="auto" data-full-width-responsive="true"></ins>
     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    
+    <footer style="text-align:center;margin-top:40px;padding:20px 0;border-top:1px solid #ddd;font-size:0.9em;color:#666;"><p>&copy; 2025 Yosemite Day Planner. Not officially affiliated with NPS.</p><p><a href="/about">About</a> | <a href="/privacy">Privacy</a> | <a href="/disclaimer">Disclaimer</a> | <a href="/contact">Contact</a></p></footer>
   </div>
+  <div id="cookie-banner" style="position:fixed;bottom:0;left:0;right:0;background:#333;color:white;padding:15px;text-align:center;font-size:0.9rem;display:none;z-index:999;">We use cookies to personalize content and ads, and to analyze our traffic. <button onclick="acceptCookies()" style="background:#4CAF50;color:white;border:none;padding:5px 15px;margin-left:10px;border-radius:4px;cursor:pointer;">Got it!</button></div>
 
   <script>
+    // ---------- Cookie Logic ----------
+    function acceptCookies() {
+      document.getElementById('cookie-banner').style.display = 'none';
+      localStorage.setItem('cookiesAccepted', 'true');
+    }
+    if (!localStorage.getItem('cookiesAccepted')) {
+      document.getElementById('cookie-banner').style.display = 'block';
+    }
+
     // ---------- Helper functions ----------
     function cF(c){return Math.round((c*9/5)+32);}
     function desc(code){
