@@ -126,8 +126,6 @@
     // ---------- Road Parsing Logic ----------
     function parseCaltransHtml(html, roadNum) {
       if (!html) return '';
-      // Simplified regex using standard strings to avoid template literal escape hell
-      // Looking for: <h3>SR [roadNum]</h3> [content] (up to [Back to Top] or <footer>)
       const regex = new RegExp('<h3>SR\\s*'+roadNum+'<\\/h3>([\\s\\S]*?)(?:\\[Back to Top\\]|<footer)', 'i');
       const match = html.match(regex);
       if (!match || !match[1]) return '';
