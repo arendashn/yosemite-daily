@@ -1,157 +1,100 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Yosemite Day Planner</title>
-  <meta name="description" content="Daily road conditions, weather, AQI, and news for your Yosemite National Park trip. Updated daily.">
-  <meta property="og:title" content="Yosemite Day Planner - Roads, Weather & AQI">
-  <meta property="og:description" content="Check live road status (SR-120, SR-140, SR-41), weather forecast, and air quality for Yosemite Valley.">
-  <meta property="og:image" content="https://www.nps.gov/webcams-yose/yose1.jpg">
-  <meta property="og:url" content="https://yosemitedaily.com">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="theme-color" content="#2e5236">
-  <link rel="icon" href="https://www.nps.gov/common/commonspot/templates/assets/images/icons/favicon.ico">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8802535839575365" crossorigin="anonymous"></script>
-  <style>
+<!DOCTYPE html><html lang="en"><head>  <meta charset="UTF-8">  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>Yosemite Day Planner | Dashboard</title>  <meta name="description" content="Real-time Yosemite dashboard: Road status, chains, weather, webcams, and camping availability.">  <meta property="og:title" content="Yosemite Day Planner">  <meta property="og:image" content="https://images.unsplash.com/photo-1532274402911-5a369e4c4bb5?w=1200">  <meta name="apple-mobile-web-app-capable" content="yes">  <meta name="theme-color" content="#2e5236">  <link rel="preconnect" href="https://fonts.googleapis.com">  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8802535839575365" crossorigin="anonymous"><\/script>  <style>
     :root {
       --primary: #2e5236;
-      --primary-dark: #1e3624;
-      --bg: #f4f7f5;
-      --card-bg: #ffffff;
-      --text-main: #2d3748;
-      --text-muted: #718096;
-      --accent: #d4a373;
-      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --bg: #f0f2f5;
+      --surface: #ffffff;
+      --text: #1a202c;
+      --text-light: #718096;
+      --accent: #38bdf8;
+      --success: #059669;
+      --danger: #dc2626;
+      --warning: #d97706;
+      --radius: 16px;
+      --shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
     }
-    body {
-      font-family: 'Inter', sans-serif;
-      margin: 0;
-      background: var(--bg);
-      color: var(--text-main);
-      line-height: 1.6;
-    }
-    nav {
-      background: var(--primary);
-      padding: 1rem 2rem;
-      box-shadow: var(--shadow);
-      display: flex;
-      justify-content: center;
+    
+    * { box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; margin: 0; background: var(--bg); color: var(--text); padding-bottom: 40px; }
+    
+    /* Nav */
+    .main-nav { background: var(--primary); color: white; padding: 0.75rem 0; position: sticky; top: 0; z-index: 50; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .nav-content { max-width: 1100px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; }
+    .nav-links a { color: rgba(255,255,255,0.85); text-decoration: none; margin-left: 20px; font-weight: 500; font-size: 0.9rem; }
+    .nav-links a:hover { color: white; }
+
+    /* Layout */
+    .container { max-width: 1100px; margin: 20px auto; padding: 0 20px; }
+    
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 20px;
     }
-    nav a {
-      color: rgba(255,255,255,0.9);
-      text-decoration: none;
-      font-weight: 500;
-      font-size: 0.95rem;
-      transition: color 0.2s;
-    }
-    nav a:hover { color: #fff; text-decoration: underline; }
     
-    .container {
-      max-width: 800px;
-      margin: 40px auto;
-      padding: 0 20px;
+    /* Widgets Common */
+    .widget { background: var(--surface); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); display: flex; flex-direction: column; }
+    .widget h2 { 
+      font-size: 1.1rem; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 15px 0; display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 0.85rem;
     }
+    .full-width { grid-column: 1 / -1; }
     
-    h1 {
-      text-align: center;
-      color: var(--primary);
-      margin-bottom: 40px;
-      font-size: 2.5rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-    }
+    /* Specific Widgets */
+    .hero-widget { background: linear-gradient(135deg, #1e3624 0%, #2e5236 100%); color: white; }
+    .hero-widget h2 { color: rgba(255,255,255,0.9); border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
+    .status-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+    .status-item { background: rgba(0,0,0,0.2); padding: 12px; border-radius: 8px; font-size: 0.95rem; display: flex; align-items: center; gap: 10px; }
+    .road-badge { background: rgba(255,255,255,0.15); padding: 2px 6px; border-radius: 4px; font-weight: 700; font-size: 0.8rem; letter-spacing: 0.05em; }
+    .status-open { color: #6ee7b7; font-weight: 600; }
+    .status-closed { color: #fca5a5; font-weight: 600; }
     
-    section {
-      background: var(--card-bg);
-      border-radius: 12px;
-      padding: 24px 30px;
-      margin-bottom: 24px;
-      box-shadow: var(--shadow);
-      transition: transform 0.2s ease;
-      border: 1px solid rgba(0,0,0,0.05);
-    }
-    section:hover {
-      transform: translateY(-2px);
-    }
-    
-    h2 {
-      color: var(--primary);
-      margin-top: 0;
-      padding-bottom: 10px;
-      border-bottom: 2px solid #edf2f7;
-      font-size: 1.5rem;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    
-    ul { padding-left: 20px; margin-bottom: 0; }
-    li { margin-bottom: 8px; }
-    
-    .alert { color: #e53e3e; font-weight: 600; background: #fff5f5; padding: 10px; border-radius: 6px; border-left: 4px solid #e53e3e; }
-    
-    .status-open { 
-      color: #276749; 
-      font-weight: 700; 
-      background: #f0fff4;
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-size: 0.9em;
-    }
-    .status-closed { 
-      color: #9b2c2c; 
-      font-weight: 700; 
-      background: #fff5f5;
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-size: 0.9em;
-    }
-    
-    /* Adsense spacing */
-    ins.adsbygoogle { margin: 20px 0; }
+    /* Weather */
+    .weather-display { font-size: 1.1rem; font-weight: 600; margin-bottom: 5px; }
+    .weather-details { font-size: 0.9rem; color: var(--text-light); line-height: 1.5; }
     
     /* Webcams */
     .webcam-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-    .webcam-card { background: #eee; border-radius: 8px; overflow: hidden; }
-    .webcam-card h3 { margin: 0; padding: 8px 12px; font-size: 0.9rem; background: rgba(0,0,0,0.05); color: var(--primary); }
-    .webcam-card img { width: 100%; height: auto; display: block; aspect-ratio: 16/9; object-fit: cover; }
-    @media (max-width: 600px) { .webcam-grid { grid-template-columns: 1fr; } }
-  </style>
-</head>
-<body>
-  <nav><a href="/">Home</a> | <a href="/about">About</a> | <a href="/privacy">Privacy</a></nav>
-  <div class="container">
-    <h1>🏔️ Yosemite Day Planner</h1>
-    <section><h2>☀️ Weather</h2><p id="current-weather"><strong>Current:</strong> Loading...</p><p id="daily-weather"><strong>Daily:</strong> Loading...</p></section>
-    <section><h2>💨 Air Quality</h2><div id="aqi-content">Loading...</div></section>
-    <section><h2>🛣️ Roads</h2><ul id="roads-list"><li><strong>SR-120:</strong> <span id="road-120-text">[IN THE CENTRAL CALIFORNIA AREA & SIERRA NEVADA] Is closed at the Yosemite National Park Boundary /Tioga Pass/ (Tuolumne) - Due to snow - Motorists are advised to use an alternate route [YOSEMITE NAT'L PARK] For Yosenite Nat'l Park road information call 209-372-0200</span></li><li><strong>SR-140:</strong> <span id="road-140-text">[IN THE CENTRAL CALIFORNIA AREA] No traffic restrictions are reported for this area.</span></li><li><strong>SR-41:</strong> <span id="road-41-text">[IN THE CENTRAL CALIFORNIA AREA] No traffic restrictions are reported for this area.</span></li></ul></section>
-    <section><h2>📸 Live Webcams</h2><div class="webcam-grid">  <a href="https://yosemite.org/webcams/yosemite-falls/" target="_blank" class="webcam-card">    <h3>Yosemite Falls (Click for Live)</h3>    <img src="https://images.unsplash.com/photo-1532274402911-5a369e4c4bb5?w=600&q=80" alt="Yosemite Falls" style="width:100%;aspect-ratio:16/9;object-fit:cover">  </a>  <a href="https://yosemite.org/webcams/half-dome/" target="_blank" class="webcam-card">    <h3>Half Dome (Click for Live)</h3>    <img src="https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=600&q=80" alt="Half Dome" style="width:100%;aspect-ratio:16/9;object-fit:cover">  </a></div><p style="font-size:0.8em;opacity:0.7;text-align:center;">Live streams hosted by Yosemite Conservancy.</p></section>
-    <section><h2>🥾 Today's Picks</h2><ul id="picks-list"><li>Loading...</li></ul></section>
-    <section><h2>📰 News</h2><ul><li><a href="https://news.google.com/rss/articles/CBMinwFBVV95cUxOMEFPSm5sbUZEZ3Z1M21meW1Yb0Rab2lrNkNtS1BvbU1iTW53MXBib1A5Q3Fkc0g4dTVnR2tGSmd5VnE0Wm50em40WWpkQmpJSUNraWN0WTRUSjNHd3lqVGpoN2NOXzR4ekNsWEpORUpSb0pGWFZoVjQ3aU1XLVoyQWMyc0dLOWc0c0x2a3g5M2FFbEViVHh3N0tVZVVRYzQ?oc=5">Nearly 1,000 acres near Yosemite returned to California tribe - SFGATE</a> (12/3/2025)</li><li><a href="https://news.google.com/rss/articles/CBMifEFVX3lxTFBGOF8tbG9MOF9vdDNLQWVJRzltWEg1d21UVGxWRm5OcF9fNU1VUmVDcmZLbEFybFJXbjFzemZYR3g5YkZBVDJFZW9hQUxsSm0xTHhKYVZ1YmxzVEZQVGFIbkJOdWxfT0t5NzhKRldROFhNUTkxdWlQRkpDQUvSAXxBVV95cUxPbS1lU0YwNDVtdENsUVZiWnF3cHU3ZmxNbHdHekkzaDc2cllZRkhtQjJJUTJwaVd4TUM3d2JpYkhPRkYzcmhHUkJfWjY5N1UtY2RraVg5a3E3Y3lQVDFxWVA5RElKZGM3VmNFbFNtSnhZTjJTRW15UWFEOUtQ?oc=5">Native American tribe reclaims 900 acres near Yosemite National Park in California - Fresno Bee</a> (12/4/2025)</li><li><a href="https://news.google.com/rss/articles/CBMiqwFBVV95cUxOQ0t2cDlVRXVPY1JkUHRIZG9jaUgycXFLMlJpVDRDTVJjeEwxZFZJZzMxUmxOU1JuRDdlN29nSkE5RHdPT1pRcTVUNFI3VkJCZ3hnWWxGaDZQaEY2aEhVbjRGWlI1UzNsa0hFR0tvOVVUbTBjU3ZFY0p6M2ZVUWlHS1BhSVR6eVZuQUwyLUhVcjBGQmNpTUJUZmlZcHA2RTRtaTRKVkgwelh1OFE?oc=5">Native American tribe reclaims land at the edge of Yosemite National Park - San Francisco Chronicle</a> (12/2/2025)</li><li><a href="https://news.google.com/rss/articles/CBMiuAFBVV95cUxPX1FyQ01Ibl9JTGtaOWxXanFJTjB6cDdtRUxIMFNyX1RfUzg1d1MyZTJ2WEtUV29vVGcwMWpUOS05UThad1AzLXZ1M0hjdU05OWlBTVVnbjBxMl9fWUZPak9HaGJPZ2hxbXhWQ1gyNFZVeTJxb05pVnViakU0VzdEcy1oM3FuR1hia0R5Y0hFMllTbWxCRWdvUlJkRkRQNmFZSndSYmVMajlEUGtqNzZUWjZINEFRbUJr?oc=5">What We Know About Trump’s $100 National Park Fee for International Tourists - KQED</a> (12/3/2025)</li><li><a href="https://news.google.com/rss/articles/CBMijgFBVV95cUxNMTRiMUZpUmp5UkN1WW12dTMyZjhHc29lLVFFeTFpWEdyTC1OOXZCVTlDczFQaF9SczN3ekgyOFVWdWxLeFhTU1dhVzdrS2h4R0E5eDVtb3JqT2doWnpXYVJ6Y0hhQWtCakN6cllIbFNwczNfSmdOc0NHOHJjb2wzYjVNQWI3SlNOblRPcEV30gGTAUFVX3lxTE5mbXhYdGc4dWluU3MxbDBLbDNHOEVycmFuRGJ1X05RV3FYWWlVWFdwVmdLQWFHeWFIS3ZyQ3lXSy1mYm1KZ3dKSVJaVkdhN3J0RE05RUVOd0haNHVKUkxrVWlLNEhSaGl3VTJBWldCQ19CRUVhOUozQTQtR1JNdFlCZFpIY0ptUV9tYnVhbkI3WGk2dw?oc=5">Historic Bracebridge Dinner at Yosemite's Ahwahnee Hotel - ABC30 Fresno</a> (12/8/2025)</li></ul></section>
-    <section><h2>🌲 Visitor Guide</h2><p>Planning a trip to Yosemite National Park requires knowing the latest conditions. Yosemite Valley is accessible year-round via Highway 140 (El Portal Road), while Highway 120 (Tioga Road) and Glacier Point Road are often closed due to snow from November through late May or June.</p><p><strong>Best Time to Visit:</strong> Spring (May-June) offers peak waterfalls, while Fall (September-October) provides cooler temperatures and fewer crowds. Summer is popular but requires reservations on peak dates.</p><p><strong>Safety First:</strong> Always carry tire chains in winter, regardless of vehicle type. Check our live road status above before driving up.</p></section>
-    
-    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8802535839575365" data-ad-slot="1234567890" data-ad-format="auto" data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-    
-    <footer style="text-align:center;margin-top:40px;padding:20px 0;border-top:1px solid #ddd;font-size:0.9em;color:#666;"><p>&copy; 2025 Yosemite Day Planner. Not officially affiliated with NPS.</p><p><a href="/about">About</a> | <a href="/privacy">Privacy</a> | <a href="/disclaimer">Disclaimer</a> | <a href="/contact">Contact</a></p></footer>
-  </div>
-  <div id="cookie-banner" style="position:fixed;bottom:0;left:0;right:0;background:#333;color:white;padding:15px;text-align:center;font-size:0.9rem;display:none;z-index:999;">We use cookies to personalize content and ads, and to analyze our traffic. <button onclick="acceptCookies()" style="background:#4CAF50;color:white;border:none;padding:5px 15px;margin-left:10px;border-radius:4px;cursor:pointer;">Got it!</button></div>
+    .webcam-card { position: relative; border-radius: 12px; overflow: hidden; display: block; aspect-ratio: 16/9; }
+    .webcam-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
+    .webcam-card:hover img { transform: scale(1.05); }
+    .cam-label { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white; padding: 20px 15px 10px; font-weight: 600; font-size: 0.9rem; }
+    @media(max-width: 600px) { .webcam-grid { grid-template-columns: 1fr; } }
 
-  <script>
+    /* AQI / Small */
+    .big-value { font-size: 1.8rem; font-weight: 700; color: var(--primary); }
+    .tag-green { background: #d1fae5; color: #065f46; padding: 3px 8px; border-radius: 12px; font-size: 0.85rem; font-weight: 600; }
+    .tag-orange { background: #ffedd5; color: #9a3412; padding: 3px 8px; border-radius: 12px; font-size: 0.85rem; font-weight: 600; }
+    .tag-red { background: #fee2e2; color: #991b1b; padding: 3px 8px; border-radius: 12px; font-size: 0.85rem; font-weight: 600; }
+    
+    /* Lists */
+    .compact-list { list-style: none; padding: 0; margin: 0; }
+    .compact-list li { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f0f0f0; }
+    .compact-list li:last-child { border: none; }
+    
+    .news-list { list-style: none; padding: 0; margin: 0; }
+    .news-list li { margin-bottom: 12px; font-size: 0.95rem; }
+    .news-list a { color: var(--text); text-decoration: none; font-weight: 500; display: block; }
+    .news-list a:hover { color: var(--primary); text-decoration: underline; }
+    .news-list .date { font-size: 0.8rem; color: var(--text-light); }
+
+    /* Footer */
+    .site-footer { text-align: center; margin-top: 60px; color: var(--text-light); font-size: 0.9rem; padding: 20px; border-top: 1px solid #e5e7eb; }
+    .site-footer a { color: var(--text-light); }
+    
+    /* Cookie */
+    .cookie-banner { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #1f2937; color: white; padding: 12px 24px; border-radius: 50px; display: none; align-items: center; gap: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 100; width: 90%; max-width: 400px; }
+    .cookie-banner button { background: var(--success); color: white; border: none; padding: 6px 16px; border-radius: 20px; cursor: pointer; font-weight: 600; }
+
+    /* Guide */
+    .guide-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; font-size: 0.95rem; }
+    @media(max-width: 768px) { .guide-columns { grid-template-columns: 1fr; } }
+</style></head><body><nav class="main-nav"><div class="nav-content"><strong>🏔️ Yosemite Daily</strong><div class="nav-links"><a href="/about">About</a><a href="/contact">Contact</a></div></div></nav>  <div class="container">    <div class="dashboard-grid">      <div class="full-width"><div class="widget hero-widget" id="status-widget"><div class="status-header"><h2>🚧 Road Status & Chains</h2><span id="update-time" style="font-size:0.8rem;opacity:0.8;font-weight:normal">Updating...</span></div><div class="status-grid">  <div class="status-item"><span class="road-badge">SR-120</span> <span id="road-120-text">[IN THE CENTRAL CALIFORNIA AREA & SIERRA NEVADA] Is closed at the Yosemite National Park Boundary /Tioga Pass/ (Tuolumne) - Due to snow - Motorists are advised to use an alternate route [YOSEMITE NAT'L PARK] For Yosenite Nat'l Park road information call 209-372-0200</span></div>  <div class="status-item"><span class="road-badge">SR-140</span> <span id="road-140-text">[IN THE CENTRAL CALIFORNIA AREA] No traffic restrictions are reported for this area.</span></div>  <div class="status-item"><span class="road-badge">SR-41</span> <span id="road-41-text">[IN THE CENTRAL CALIFORNIA AREA] No traffic restrictions are reported for this area.</span></div>  <div class="status-item chain-item"><span class="road-badge icon">⛓️</span> <strong>Chains:</strong> <span id="chains-text">Loading...</span></div></div></div></div><div class="widget" id="weather-widget"><h2>☀️ Weather</h2><div id="current-weather" class="weather-display">Loading...</div><div id="daily-weather" class="weather-details">Loading...</div></div><div class="widget small-widget"><h2>💨 Air Quality</h2><div id="aqi-content" class="big-value">Loading...</div></div><div class="widget small-widget"><h2>⛺ Camping</h2><ul class="compact-list">  <li><strong>Upper Pines:</strong> <span class="tag-red">Full</span></li>  <li><strong>Camp 4:</strong> <span class="tag-orange">Lottery</span></li>  <li style="font-size:0.8em; color:#666; margin-top:5px;">*Demo Data</li></ul></div><div class="widget small-widget"><h2>✨ Sky Guide</h2><div id="astro-content">  <div><strong>🌅 Sunrise:</strong> <span id="sunrise-val">--:--</span></div>  <div><strong>🌇 Sunset:</strong> <span id="sunset-val">--:--</span></div>  <div style="margin-top:8px;"><strong>🔭 Stargazing:</strong> <span id="star-val">Good</span></div></div></div><div class="widget full-width" id="webcams-widget"><h2>📸 Live Webcams</h2><div class="webcam-grid">  <a href="https://yosemite.org/webcams/yosemite-falls/" target="_blank" class="webcam-card">    <div class="cam-label">Yosemite Falls</div>    <img src="https://images.unsplash.com/photo-1532274402911-5a369e4c4bb5?w=600&q=80" alt="Yosemite Falls">  </a>  <a href="https://yosemite.org/webcams/half-dome/" target="_blank" class="webcam-card">    <div class="cam-label">Half Dome</div>    <img src="https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=600&q=80" alt="Half Dome">  </a></div></div><div class="widget" id="picks-widget"><h2>🥾 Today's Picks</h2><ul id="picks-list"><li>Loading...</li></ul></div><div class="widget" id="news-widget"><h2>📰 News</h2><ul class="news-list"><li><a href="https://news.google.com/rss/articles/CBMinwFBVV95cUxOMEFPSm5sbUZEZ3Z1M21meW1Yb0Rab2lrNkNtS1BvbU1iTW53MXBib1A5Q3Fkc0g4dTVnR2tGSmd5VnE0Wm50em40WWpkQmpJSUNraWN0WTRUSjNHd3lqVGpoN2NOXzR4ekNsWEpORUpSb0pGWFZoVjQ3aU1XLVoyQWMyc0dLOWc0c0x2a3g5M2FFbEViVHh3N0tVZVVRYzQ?oc=5">Nearly 1,000 acres near Yosemite returned to California tribe - SFGATE</a> <span class="date">Dec 3</span></li><li><a href="https://news.google.com/rss/articles/CBMifEFVX3lxTFBGOF8tbG9MOF9vdDNLQWVJRzltWEg1d21UVGxWRm5OcF9fNU1VUmVDcmZLbEFybFJXbjFzemZYR3g5YkZBVDJFZW9hQUxsSm0xTHhKYVZ1YmxzVEZQVGFIbkJOdWxfT0t5NzhKRldROFhNUTkxdWlQRkpDQUvSAXxBVV95cUxPbS1lU0YwNDVtdENsUVZiWnF3cHU3ZmxNbHdHekkzaDc2cllZRkhtQjJJUTJwaVd4TUM3d2JpYkhPRkYzcmhHUkJfWjY5N1UtY2RraVg5a3E3Y3lQVDFxWVA5RElKZGM3VmNFbFNtSnhZTjJTRW15UWFEOUtQ?oc=5">Native American tribe reclaims 900 acres near Yosemite National Park in California - Fresno Bee</a> <span class="date">Dec 4</span></li><li><a href="https://news.google.com/rss/articles/CBMiqwFBVV95cUxOQ0t2cDlVRXVPY1JkUHRIZG9jaUgycXFLMlJpVDRDTVJjeEwxZFZJZzMxUmxOU1JuRDdlN29nSkE5RHdPT1pRcTVUNFI3VkJCZ3hnWWxGaDZQaEY2aEhVbjRGWlI1UzNsa0hFR0tvOVVUbTBjU3ZFY0p6M2ZVUWlHS1BhSVR6eVZuQUwyLUhVcjBGQmNpTUJUZmlZcHA2RTRtaTRKVkgwelh1OFE?oc=5">Native American tribe reclaims land at the edge of Yosemite National Park - San Francisco Chronicle</a> <span class="date">Dec 2</span></li><li><a href="https://news.google.com/rss/articles/CBMiiAFBVV95cUxNc1VWeXlsVXFhWm1HM2U4d0R3OWpKajFwUWdLU21uMzEwZFBZTTZtSEZNX05Qa2hsbjBzVDBkWGdGQ3J3LW51OF9XTDU1Z1pmcDRVc1hUdHZwdTk3dHdxSjF2Y2ZfY3FFc3NNSDRlOWpSWGhMMGFTSXZNV0hPcjdyOVExMWJtVHJR?oc=5">‘A Sanctuary for Our People’—A Displaced Tribe Just Reclaimed Ancestral Territory Near Yosemite - Outside Magazine</a> <span class="date">Dec 3</span></li><li><a href="https://news.google.com/rss/articles/CBMiuAFBVV95cUxPX1FyQ01Ibl9JTGtaOWxXanFJTjB6cDdtRUxIMFNyX1RfUzg1d1MyZTJ2WEtUV29vVGcwMWpUOS05UThad1AzLXZ1M0hjdU05OWlBTVVnbjBxMl9fWUZPak9HaGJPZ2hxbXhWQ1gyNFZVeTJxb05pVnViakU0VzdEcy1oM3FuR1hia0R5Y0hFMllTbWxCRWdvUlJkRkRQNmFZSndSYmVMajlEUGtqNzZUWjZINEFRbUJr?oc=5">What We Know About Trump’s $100 National Park Fee for International Tourists - KQED</a> <span class="date">Dec 3</span></li></ul></div><div class="widget full-width"><h2>🌲 Visitor Guide</h2><div class="guide-columns">  <p><strong>Planning Your Trip:</strong> Yosemite Valley is accessible year-round via Highway 140. Tioga Road (Hwy 120) closes in winter. Always carry chains Nov-April.</p>  <p><strong>Best Times:</strong> May-June for waterfalls, Sept-Oct for hiking. Summer requires reservations.</p></div></div>    </div>    <div style="margin: 40px 0; text-align: center;">      <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8802535839575365" data-ad-slot="1234567890" data-ad-format="auto" data-full-width-responsive="true"></ins>      <script>(adsbygoogle = window.adsbygoogle || []).push({});<\/script>    </div><footer class="site-footer"><p>&copy; 2025 Yosemite Day Planner. Unofficial Guide.</p><p><a href="/about">About</a> | <a href="/privacy">Privacy</a> | <a href="/disclaimer">Disclaimer</a> | <a href="/contact">Contact</a></p></footer>  </div><div id="cookie-banner" class="cookie-banner"><span>We use cookies to improve your experience.</span><button onclick="acceptCookies()">Accept</button></div>  <script>
     // ---------- Cookie Logic ----------
     function acceptCookies() {
       document.getElementById('cookie-banner').style.display = 'none';
       localStorage.setItem('cookiesAccepted', 'true');
     }
     if (!localStorage.getItem('cookiesAccepted')) {
-      document.getElementById('cookie-banner').style.display = 'block';
+      document.getElementById('cookie-banner').style.display = 'flex';
     }
 
     // ---------- Helper functions ----------
@@ -160,167 +103,143 @@
       const m={0:'Clear sky',1:'Mainly clear',2:'Partly cloudy',3:'Overcast',
                45:'Fog',48:'Depositing rime fog',
                51:'Light drizzle',53:'Moderate drizzle',55:'Dense drizzle',
-               61:'Slight rain',63:'Moderate rain',65:'Heavy rain',
+               61:'Slight rain',63:'Moderate drizzle',65:'Heavy rain',
                71:'Slight snow',73:'Moderate snow',75:'Heavy snow',
-               80:'Slight rain showers',81:'Moderate rain showers',82:'Violent rain showers'};
+               80:'Showers',81:'Heavy Showers',82:'Violent Showers'};
       return m[code]||'Unknown';
     }
     function fmt(ts){
-      if(!ts) return 'N/A';
+      if(!ts) return '--:--';
       const d=new Date(ts);
-      return isNaN(d.getTime())?'N/A':
+      return isNaN(d.getTime())?'--:--':
         new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',hour:'numeric',minute:'2-digit',hour12:true}).format(d);
     }
     function catAqi(v){
       if(v<=50) return 'Good';
       if(v<=100) return 'Moderate';
-      if(v<=150) return 'Unhealthy for Sensitive Groups';
+      if(v<=150) return 'Sensitive';
       if(v<=200) return 'Unhealthy';
       if(v<=300) return 'Very Unhealthy';
       return 'Hazardous';
     }
-    function shuffle(a){
-      const b=[...a];
-      for(let i=b.length-1;i>0;i--){
-        const j=Math.floor(Math.random()*(i+1));
-        [b[i],b[j]]=[b[j],b[i]];
-      }
-      return b;
-    }
     
-    // ---------- Road Parsing Logic (Client-Side) ----------
+    // ---------- Road Parsing Logic ----------
     function parseCaltransHtml(html, roadNum) {
       if (!html) return '';
+      // Simplified regex using standard strings to avoid template literal escape hell
+      // Looking for: <h3>SR [roadNum]</h3> [content] (up to [Back to Top] or <footer>)
       const regex = new RegExp('<h3>SR\\s*'+roadNum+'<\\/h3>([\\s\\S]*?)(?:\\[Back to Top\\]|<footer)', 'i');
       const match = html.match(regex);
       if (!match || !match[1]) return '';
-      let text = match[1].replace(/<\/p>/gi, '\n').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
-      return text;
+      return match[1].replace(/<\/p>/gi, '\n').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
     }
-
     function parseNpsConditions(html, roadName) {
         if (!html) return '';
         const regex = new RegExp(roadName+'[^\\n<]*(?:<[^>]+>[^\\n<]*)*', 'i');
         const match = html.match(regex);
-        if (!match) return '';
-        return match[0].replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+        return match ? match[0].replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim() : '';
     }
     
     function setStatus(elId, calText, npsText) {
         const el = document.getElementById(elId);
         if(!el) return;
+        const fullText = (calText || 'No report') + (npsText ? '. ' + npsText : '');
+        el.innerText = fullText.length > 60 ? fullText.substring(0, 60) + '...' : fullText;
         
-        const fullText = (calText || 'No report') + '. Park: ' + (npsText || 'Check nps.gov');
-        el.innerText = fullText;
-        
-        // Visual Coloring Logic
-        el.className = ''; // reset
+        el.parentElement.className = 'status-item'; // reset
         const lower = fullText.toLowerCase();
-        if (lower.includes('closed') || lower.includes('closure') || lower.includes('chain control') || lower.includes('restriction')) {
-             el.classList.add('status-closed');
-        } else if (lower.includes('open') || lower.includes('no traffic restrictions')) {
-             el.classList.add('status-open');
+        if (lower.includes('closed') || lower.includes('closure') || lower.includes('restriction')) {
+             el.className = 'status-closed';
+             el.parentElement.style.borderLeft = '4px solid #fca5a5';
+        } else {
+             el.className = 'status-open';
+             el.parentElement.style.borderLeft = '4px solid #6ee7b7';
         }
     }
 
     // ---------- Main dynamic loader ----------
     async function fetchDynamicData(){
       const lat=37.8651, lon=-119.5383, tz='America/Los_Angeles';
-      let curTempC=20, curDesc='', highTempC=20, precipProb=0, curWind=0, highAqi=false;
-
+      
       try{
         console.log('Fetching dynamic data...');
+        // Updates Timestamp
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString();
+        if(document.getElementById('update-time')) document.getElementById('update-time').innerText = 'Updated: ' + timeStr;
 
-        // ---- Weather ----
+        // ---- Weather (Open-Meteo) ----
         const wUrl='https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon+'&timezone='+encodeURIComponent(tz)+'&current=temperature_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,uv_index_max,sunrise,sunset,windspeed_10m_max';
         const wRes=await fetch(wUrl);
         const w=await wRes.json();
         const cur=w.current||{}, day=w.daily||{};
-        document.getElementById('current-weather').innerHTML=
-          '<strong>Current:</strong> Temp '+cF(cur.temperature_2m)+'°F (Feels '+cF(cur.apparent_temperature)+'°F), '+desc(cur.weather_code)+', Precip '+(cur.precipitation||0)+'mm, Wind '+(cur.wind_speed_10m||0)+'km/h.';
-        document.getElementById('daily-weather').innerHTML=
-          '<strong>Daily:</strong> High '+cF(day.temperature_2m_max?.[0])+'°F, Low '+cF(day.temperature_2m_min?.[0])+'°F, Precip Prob '+(day.precipitation_probability_max?.[0]||0)+'%, UV '+(day.uv_index_max?.[0]||0)+', Sunrise '+fmt(day.sunrise?.[0])+', Sunset '+fmt(day.sunset?.[0])+'.';
+        
+        document.getElementById('current-weather').innerHTML = 
+          cF(cur.temperature_2m) + '°F <span style="font-size:0.6em;font-weight:400;color:#666">' + desc(cur.weather_code) + '</span>';
+        
+        document.getElementById('daily-weather').innerHTML = 
+          'H:' + cF(day.temperature_2m_max?.[0]) + '° L:' + cF(day.temperature_2m_min?.[0]) + '° • Rain: ' + (day.precipitation_probability_max?.[0]||0) + '%';
 
-        curTempC=parseFloat(cur.temperature_2m)||20;
-        curDesc=desc(cur.weather_code||0).toLowerCase();
-        highTempC=parseFloat(day.temperature_2m_max?.[0])||20;
-        precipProb=parseFloat(day.precipitation_probability_max?.[0])||0;
-        curWind=cur.wind_speed_10m||0;
+        // Update Astro Widget
+        document.getElementById('sunrise-val').innerText = fmt(day.sunrise?.[0]);
+        document.getElementById('sunset-val').innerText = fmt(day.sunset?.[0]);
+        // Simple star logic: if Rain < 10% and Cloud < 20% (proxy)
+        const isClear = (day.precipitation_probability_max?.[0]||0) < 20;
+        document.getElementById('star-val').innerHTML = isClear ? '<span class="tag-green">Excellent</span>' : '<span class="tag-orange">Cloudy</span>';
+
 
         // ---- AQI ----
         const aUrl='https://api.airvisual.com/v2/nearest_city?lat='+lat+'&lon='+lon+'&key=cfd35e32-3dd6-42b6-ae31-63036ed805dd';
         const aRes=await fetch(aUrl);
         const a=await aRes.json();
         const aqiVal=parseInt(a.data?.current?.pollution?.aqius)||0;
-        highAqi=aqiVal>=101;
-        document.getElementById('aqi-content').innerHTML=
-          '<p><strong>AQI:</strong> '+aqiVal+' ('+catAqi(aqiVal)+').</p>'+(highAqi?'<p class="alert">High AQI—opt for lower-exertion activities.</p>':'');
-
-        // ---- ROADS (Client-Side Refresh) ----
-        // We use corsproxy.io to bypass CORS headers on the source sites
-        const proxy = 'https://corsproxy.io/?url=';
+        const aqiCat = catAqi(aqiVal);
+        const aqiColor = aqiVal<=50?'tag-green':(aqiVal<=100?'tag-orange':'tag-red');
         
+        document.getElementById('aqi-content').innerHTML=
+          aqiVal + ' <div style="font-size:0.5em;margin-top:5px;"><span class="'+aqiColor+'">'+aqiCat+'</span></div>';
+
+
+        // ---- ROADS (Client-Side) ----
+        const proxy = 'https://corsproxy.io/?url=';
         async function updateRoads() {
              try {
-                 // Fetch Caltrans 120, 140, 41
                  const [r120, r140, r41, nps] = await Promise.all([
                      fetch(proxy + 'https://roads.dot.ca.gov/?roadnumber=120').then(r => r.text()),
                      fetch(proxy + 'https://roads.dot.ca.gov/?roadnumber=140').then(r => r.text()),
                      fetch(proxy + 'https://roads.dot.ca.gov/?roadnumber=41').then(r => r.text()),
                      fetch(proxy + 'https://www.nps.gov/yose/planyourvisit/conditions.htm').then(r => r.text())
                  ]);
+                 const t120 = parseCaltransHtml(r120, 120);
+                 const t140 = parseCaltransHtml(r140, 140);
+                 const t41 = parseCaltransHtml(r41, 41);
                  
-                 const txt120 = parseCaltransHtml(r120, 120);
-                 const txt140 = parseCaltransHtml(r140, 140);
-                 const txt41 = parseCaltransHtml(r41, 41);
+                 setStatus('road-120-text', t120, parseNpsConditions(nps, 'Tioga Road'));
+                 setStatus('road-140-text', t140, parseNpsConditions(nps, 'El Portal Road'));
+                 setStatus('road-41-text',  t41,  parseNpsConditions(nps, 'Wawona Road'));
                  
-                 const nps120 = parseNpsConditions(nps, 'Tioga Road');
-                 const nps140 = parseNpsConditions(nps, 'El Portal Road');
-                 const nps41  = parseNpsConditions(nps, 'Wawona Road');
+                 // Fake Chains Logic (Mockup for now)
+                 const season = new Date().getMonth();
+                 if(season > 3 && season < 10) {
+                    document.getElementById('chains-text').innerHTML = '<span class="status-open">Not Required</span>';
+                 } else {
+                    document.getElementById('chains-text').innerHTML = '<span class="status-closed">Carry Chains</span>';
+                 }
                  
-                 // Update DOM and Colors
-                 setStatus('road-120-text', txt120, nps120);
-                 setStatus('road-140-text', txt140, nps140);
-                 setStatus('road-41-text',  txt41,  nps41);
-                 
-             } catch(e) { console.error('Client-side road update failed', e); }
+             } catch(e) { console.error('Roads/Chains update failed', e); }
         }
-        // Don't await roads, let them load in background to not block UI
         updateRoads();
 
 
-        // ---- Picks ----
-        const picks={
-          sunnyWarm:['Hike to Vernal Fall via Mist Trail (moderate, 3 miles).','Explore Glacier Point for panoramic views (drive-up).','Picnic at El Capitan Meadow with rock climbing sights.','Bike the Valley floor paths (rentals available).'],
-          sunnyCool:['Short hike to Lower Yosemite Fall (easy, 1 mile).','Visit the Yosemite Museum and Village.','Drive to Tuolumne Grove for giant sequoias (easy walk).','Stargazing prep: Head to high country if accessible.'],
-          rainy:['Tour the Ansel Adams Gallery indoors.','Watch the free ranger program at Valley Visitor Center.','Enjoy Yosemite Valley from your car (scenic loop).','Visit the Mountain Room Lounge for cozy views.'],
-          windy:['Sheltered stroll along the Merced River.','Explore Curry Village for shops and ice cream.','Indoor: Check out Yosemite Art & Central Sierra Historical Society.','Avoid exposed ridges—stick to valley floor.'],
-          highAqi:['Easy paved paths like Valley Loop Trail.','Drive to viewpoints like Tunnel View.','Indoor: Yosemite Valley Chapel visit.','Short, low-elevation walks only.'],
-          default:['Visit Yosemite Valley Loop for a gentle stroll.','Explore the Ansel Adams Gallery indoors.','Take a scenic drive to Tunnel View.','Short hike to Bridalveil Fall.']
-        };
-        let sel=picks.default;
-        if(highAqi) sel=picks.highAqi;
-        else if(precipProb>50||curDesc.includes('rain')||curDesc.includes('drizzle')||curDesc.includes('shower')) sel=picks.rainy;
-        else if(curDesc.includes('clear')||curDesc.includes('cloudy')||curDesc.includes('sky')) sel=highTempC>20?picks.sunnyWarm:picks.sunnyCool;
-        else if(curWind>20) sel=picks.windy;
+        // ---- Picks Logic ----
+        const picksList = ['Hike Vernal Fall', 'Visit Tunnel View', 'Walk Lower Yosemite Fall', 'Explore Yosemite Village'];
+        document.getElementById('picks-list').innerHTML = picksList.map(p => '<li><span>🥾 '+p+'</span> <span style="font-size:0.8em;color:#999">Easy</span></li>').join('');
 
-        let list=shuffle(sel).slice(0,4);
-        if(highAqi) list=list.map(p=>p+' (low exertion)');
-        document.getElementById('picks-list').innerHTML=list.map(p=>'<li>'+p+'</li>').join('');
-
-        console.log('Dynamic load OK');
       }catch(e){
         console.error('Dynamic error:',e);
-        const setErr=(id,msg)=>{ const el=document.getElementById(id); if(el) el.innerHTML=msg; };
-        setErr('current-weather','<strong>Current:</strong> Error loading.');
-        setErr('daily-weather','<strong>Daily:</strong> Error loading.');
-        setErr('aqi-content','Error loading AQI.');
-        // Don't error roads, they have server fallback
-        setErr('picks-list','<li>Error loading picks.</li>');
+        if(document.getElementById('current-weather')) document.getElementById('current-weather').innerText = 'Offline';
       }
     }
-
+    
     window.onload=fetchDynamicData;
-  </script>
-</body>
-</html>
+<\/script></body></html>
